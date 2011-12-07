@@ -1,46 +1,4 @@
-const int console_width = 80;
-const int console_height = 25;
-const u8 color = 0x07; /* light grey (7) on black (0). */
-
-u16 volatile* videoram = (u16 volatile*) 0xb8000;
-
-void clear_screen() {
-   for(int i = 0; i < console_height * console_width; i++)
-      videoram[i] = (color << 8) | ' ';
-}
-
-void put_char_at(char c, int row, int col) {
-   videoram[row * console_width + col] = (color << 8) | c;
-}
-
-int position = 0;
-void put_char(char c) {
-   put_char_at(c, 0, position); // TODO Handle end of line wrapping.
-   position++;
-}
-
-int strlen(const char* str) {
-   int i;
-   while(str[i])
-      i++;
-   return i;
-}
-
-namespace std {
-   const char* begin(const char* str) {
-      return str;
-   }
-
-   const char* end(const char* str) {
-      return str + strlen(str);
-   }
-}
-
-void put_string(const char* str) {
-   for(char c : str)
-      put_char(c);
-}
-
+#include "display.h"
 
 extern "C" void kmain(void* /*mbd*/, u32 magic)
 {
