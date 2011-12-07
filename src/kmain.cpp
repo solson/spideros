@@ -19,9 +19,26 @@ void put_char(char c) {
    position++;
 }
 
+int strlen(const char* str) {
+   int i;
+   while(str[i])
+      i++;
+   return i;
+}
+
+namespace std {
+   const char* begin(const char* str) {
+      return str;
+   }
+
+   const char* end(const char* str) {
+      return str + strlen(str);
+   }
+}
+
 void put_string(const char* str) {
-   for(int i = 0; str[i]; i++)
-      put_char(str[i]);
+   for(char c : str)
+      put_char(c);
 }
 
 
