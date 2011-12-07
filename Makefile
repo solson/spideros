@@ -1,25 +1,26 @@
 CXX := g++
 
-CXXFLAGS := -m32 -nostdinc -ffreestanding -fno-stack-protector
+CXXFLAGS := -m32 -Wall -Wextra -Werror \
+	-nostdlib -fno-builtin -fno-exceptions -fno-rtti -fno-stack-protector
 LDFLAGS := -melf_i386 -nostdlib -g
 ASFLAGS := -felf32 -g
 
 STAGE2 := /boot/grub/stage2_eltorito
 
 CXXFILES := $(shell find "src" -name "*.cpp")
+HDRFILES := $(shell find "src" -name "*.h")
 ASMFILES := $(shell find "src" -name "*.asm")
-OBJFILES := $(patsubst %.cpp,%.o,$(CXXFILES))
-ASMOBJFILES := $(patsubst %.asm,%.o,$(ASMFILES))
+OBJFILES := $(patsubst %.asm,%.o,$(ASMFILES)) $(patsubst %.cpp,%.o,$(CXXFILES))
 
-.PHONY: all clean bochs bochs-dbg
+.PHONY: all clean bochs
 
 all: spideros.iso
 
-bochs: all
-	bochs -qf .bochsrc
+bochs: spideros.iso
+	@bochs -qf .bochsrc
 
-bochs-dbg: all
-	bochs -qf .bochsrc-dbg
+qemu: spideros.iso
+	@qemu -cdrom spideros.iso -net none
 
 spideros.iso: spideros.exe isofs/boot/grub/stage2_eltorito isofs/boot/grub/menu.lst
 	@mkdir -p isofs/system
@@ -27,14 +28,14 @@ spideros.iso: spideros.exe isofs/boot/grub/stage2_eltorito isofs/boot/grub/menu.
 	genisoimage -R -b boot/grub/stage2_eltorito -no-emul-boot -boot-load-size 4 -boot-info-table -input-charset utf-8 -o $@ isofs
 
 spideros.exe: ${ASMOBJFILES} ${OBJFILES}
-	${LD} ${LDFLAGS} -T src/linker.ld -o $@ ${ASMOBJFILES} ${OBJFILES}
+	${LD} ${LDFLAGS} -T linker.ld -o $@ ${OBJFILES}
 
 %.o: %.asm
 	nasm ${ASFLAGS} -o $@ $<
 
 isofs/boot/grub/stage2_eltorito:
-	mkdir -p isofs/boot/grub
+	@mkdir -p isofs/boot/grub
 	cp ${STAGE2} $@
 
 clean:
-	 $(RM) -r $(wildcard $(ASMOBJFILES) ${OBJFILES} spideros.exe spideros.iso)
+	 $(RM) $(wildcard $(OBJFILES) spideros.exe spideros.iso)
