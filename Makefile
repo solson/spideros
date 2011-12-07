@@ -1,9 +1,11 @@
 CXX := g++
+AS  := nasm
+LD  := ld
 
 CXXFLAGS := -m32 -Wall -Wextra -Werror \
 	-nostdlib -fno-builtin -fno-exceptions -fno-rtti -fno-stack-protector
-LDFLAGS := -melf_i386 -nostdlib -g
 ASFLAGS := -felf32 -g
+LDFLAGS := -melf_i386 -nostdlib -g
 
 STAGE2 := /boot/grub/stage2_eltorito
 
@@ -27,11 +29,14 @@ spideros.iso: spideros.exe isofs/boot/grub/stage2_eltorito isofs/boot/grub/menu.
 	cp $< isofs/system
 	genisoimage -R -b boot/grub/stage2_eltorito -no-emul-boot -boot-load-size 4 -boot-info-table -input-charset utf-8 -o $@ isofs
 
-spideros.exe: ${ASMOBJFILES} ${OBJFILES}
-	${LD} ${LDFLAGS} -T linker.ld -o $@ ${OBJFILES}
+spideros.exe: ${OBJFILES}
+	${LD} ${LDFLAGS} -T linker.ld -o $@ $^
+
+%.o: %.cpp
+	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 %.o: %.asm
-	nasm ${ASFLAGS} -o $@ $<
+	$(AS) ${ASFLAGS} -o $@ $<
 
 isofs/boot/grub/stage2_eltorito:
 	@mkdir -p isofs/boot/grub
