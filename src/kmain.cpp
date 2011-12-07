@@ -1,5 +1,4 @@
-extern "C"
-void kmain(void* /*mbd*/, unsigned int magic)
+extern "C" void kmain(void* /*mbd*/, u32 magic)
 {
    if ( magic != 0x2BADB002 )
    {

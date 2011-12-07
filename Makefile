@@ -2,7 +2,7 @@ CXX := g++
 AS  := nasm
 LD  := ld
 
-CXXFLAGS := -m32 -Wall -Wextra -Werror \
+CXXFLAGS := -include src/prelude.h -m32 -Wall -Wextra -Werror \
 	-nostdlib -fno-builtin -fno-exceptions -fno-rtti -fno-stack-protector
 ASFLAGS := -felf32 -g
 LDFLAGS := -melf_i386 -nostdlib -g
