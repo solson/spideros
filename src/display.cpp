@@ -10,14 +10,44 @@ void clear_screen() {
         videoram[i] = (color << 8) | ' ';
 }
 
-void put_char_at(char c, int line, int col) {
-    videoram[line * console_width + col] = (color << 8) | c;
+void put_char_at(char c, int x, int y) {
+    videoram[y * console_width + x] = (color << 8) | c;
 }
 
-int position = 0;
+int cursor_x = 0;
+int cursor_y = 0;
 void print(char c) {
-    put_char_at(c, 0, position); // TODO Handle newline, tab, etc.
-    position++;
+	switch(c) {
+		case '\b':
+			if(cursor_x != 0)
+				cursor_x--;
+			break;
+		case '\t':
+			// TODO Increase cursor_x to a multiple of 8
+			break;
+		case '\r':
+			cursor_x = 0;
+			break;
+		case '\n':
+			cursor_x = 0;
+			cursor_y++;
+			break;
+		default:
+			put_char_at(c, cursor_x, cursor_y);
+			cursor_x++;
+	}
+
+	if(cursor_x == console_width) {
+		cursor_x = 0;
+		cursor_y++;
+	}
+
+	if(cursor_y == console_height) {
+		cursor_y--;
+		// TODO scroll
+	}
+
+	// TODO update cursor position
 }
 
 void print(const char* str) {

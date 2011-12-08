@@ -33,6 +33,11 @@ inline void print(First first, Second second, Rest... rest) {
     print(rest...);
 }
 
+template<typename... Args>
+inline void println(Args... args) {
+	print(args..., '\n');
+}
+
 } // namepspace display
 
 #endif /* DISPLAY_H */
