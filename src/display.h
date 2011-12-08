@@ -28,9 +28,9 @@ inline void print() {}
 
 template<typename First, typename Second, typename... Rest>
 inline void print(First first, Second second, Rest... rest) {
-   print(first);
-   print(second);
-   print(rest...);
+    print(first);
+    print(second);
+    print(rest...);
 }
 
 } // namepspace display
