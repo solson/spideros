@@ -41,7 +41,7 @@ struct info {
 
     // Determines which fields below are present.
     u32 flags;
-    
+
     // Available memory from BIOS (in kilobytes)
     u32 memory_lower, memory_higher;
 
