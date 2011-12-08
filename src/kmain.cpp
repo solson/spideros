@@ -15,7 +15,11 @@ extern "C" void kmain(void* /*mbd*/, u32 magic)
    //char * boot_loader_name =(char*) ((long*)mbd)[16];
 
    /* Print a string to screen to see everything is working: */
-   clear_screen();
-   put_string("This is a test!");
+   display::clear_screen();
+   display::print("This is", " a", ' ', 't', "est", '!');
+   int a = 12, b = 3;
+   display::print(" Hey, guess what? ", a, " * ", b, " = ", a * b);
+
+   for(;;);
 }
 

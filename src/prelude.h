@@ -3,6 +3,7 @@
 #define PRELUDE_H
 
 #include "types.h"
+#include "assert.h"
 
 #endif /* PRELUDE_H */
 
