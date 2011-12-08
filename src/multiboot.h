@@ -48,7 +48,7 @@ struct info {
     u32 memory_lower, memory_higher;
 
     // Boot device which was used to boot the kernel.
-    alignas(u32) const char* boot_device;
+    u32 boot_device;
 
     // The command line passed to the kernel by the bootloader.
     // Example: /system/spideros.exe
