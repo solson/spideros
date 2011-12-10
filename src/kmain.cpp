@@ -2,6 +2,8 @@
 #include "multiboot.h"
 
 extern "C" void kmain(multiboot::info* mbinfo, u32 magic) {
+    display::init();
+
     if(magic != multiboot::bootloader_magic) {
         // Something went not according to specs. Do not rely on the
         // multiboot data structure.
@@ -11,7 +13,7 @@ extern "C" void kmain(multiboot::info* mbinfo, u32 magic) {
     }
 
     // Print to screen to see everything is working.
-    display::init();
+    display::clear_screen();
     display::println("Welcome to SpiderOS!");
     display::println("====================");
     display::println("This is", " a", ' ', 't', "est", '!');

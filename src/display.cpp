@@ -17,8 +17,6 @@ void init() {
     u16 volatile* base_io_port = (u16 volatile*) 0x0463;
     index_port = *base_io_port;
     data_port = index_port + 1;
-
-    clear_screen();
 }
 
 void clear_screen() {
