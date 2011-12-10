@@ -43,7 +43,7 @@ isofs/boot/grub/stage2_eltorito:
 	cp ${STAGE2} $@
 
 todolist:
-	@grep --color=auto --exclude=Makefile -r -F -n -e TODO -e FIXME .
+	@grep --color=auto --exclude=Makefile -r -F -n -I -e TODO -e FIXME src
 
 clean:
 	$(RM) $(wildcard $(OBJFILES) spideros.exe spideros.iso)
