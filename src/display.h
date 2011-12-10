@@ -16,6 +16,7 @@ const int cursor_high_port = 0x0F;
 
 extern int cursor_x, cursor_y;
 
+// TODO: Allow the color to be changed.
 const u8 color = 0x07; /* light grey (7) on black (0). */
 
 enum class color : u8 {
