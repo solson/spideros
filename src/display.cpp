@@ -10,6 +10,22 @@ void clear_screen() {
         videoram[i] = (color << 8) | ' ';
 }
 
+void scroll() {
+    // Copy each line onto the one above it.
+    for(int y = 0; y < console_height - 1; y++) {
+        for(int x = 0; x < console_width; x++) {
+            const int target_i = y * console_width + x;
+            const int source_i = (y + 1) * console_width + x;
+            videoram[target_i] = videoram[source_i];
+        }
+    }
+
+    // Blank out the bottom line.
+    for(int x = 0; x < console_width; x++)
+        videoram[(console_height - 1) * console_width + x]
+            = (color << 8) | ' ';
+}
+
 void put_char_at(char c, int x, int y) {
     videoram[y * console_width + x] = (color << 8) | c;
 }
@@ -47,7 +63,7 @@ void print(char c) {
 
     if(cursor_y == console_height) {
         cursor_y--;
-        // TODO scroll
+        scroll();
     }
 
     // TODO update cursor position

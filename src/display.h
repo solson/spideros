@@ -17,6 +17,7 @@ enum class color : u8 {
 };
 
 void clear_screen();
+void scroll();
 void put_char_at(char c, int line, int col);
 
 void print(char c);
