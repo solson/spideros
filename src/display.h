@@ -6,9 +6,10 @@ namespace display {
 const int console_width = 80;
 const int console_height = 25;
 
-// Display-related I/O ports
-const int index_port = 0x03D4;
-const int data_port  = 0x03D5;
+// Display-related I/O ports. They are taken from the BIOS Data Area
+// during init();
+extern int index_port;
+extern int data_port;
 
 // Indexes for the index_port
 const int cursor_low_port  = 0x0E;
@@ -28,6 +29,8 @@ enum class color : u8 {
     light_red, light_magenta, yellow, white
 };
 
+void init();
+
 void clear_screen();
 void scroll();
 void update_cursor();
@@ -36,6 +39,7 @@ void put_char_at(char c, int line, int col);
 void print(char c);
 void print(const char* str);
 void print(int x);
+void printInt(u32 n, int radix);
 
 // No-op base case for the variadic template print function
 inline void print() {}

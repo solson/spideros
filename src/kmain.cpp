@@ -11,7 +11,7 @@ extern "C" void kmain(multiboot::info* mbinfo, u32 magic) {
     }
 
     // Print to screen to see everything is working.
-    display::clear_screen();
+    display::init();
     display::println("Welcome to SpiderOS!");
     display::println("====================");
     display::println("This is", " a", ' ', 't', "est", '!');
