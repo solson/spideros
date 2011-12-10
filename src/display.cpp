@@ -4,6 +4,7 @@
 
 namespace display {
 
+// TODO: Use a special element type with color and char members.
 u16 volatile* videoram = (u16 volatile*) 0xb8000;
 int cursor_x = 0;
 int cursor_y = 0;
