@@ -1,13 +1,21 @@
 #include "display.h"
 #include "string.h"
+#include "ports.h"
 
 namespace display {
 
 u16 volatile* videoram = (u16 volatile*) 0xb8000;
+int cursor_x = 0;
+int cursor_y = 0;
 
 void clear_screen() {
     for(int i = 0; i < console_height * console_width; i++)
         videoram[i] = (color << 8) | ' ';
+
+    cursor_x = 0;
+    cursor_y = 0;
+
+    update_cursor();
 }
 
 void scroll() {
@@ -26,12 +34,21 @@ void scroll() {
             = (color << 8) | ' ';
 }
 
+// Update the position of the blinking cursor on the screen.
+void update_cursor() {
+    const int position = cursor_y * console_width + cursor_x;
+
+    ports::outb(index_port, cursor_low_port);
+    ports::outb(data_port, position >> 8);
+
+    ports::outb(index_port, cursor_high_port);
+    ports::outb(data_port, position);
+}
+
 void put_char_at(char c, int x, int y) {
     videoram[y * console_width + x] = (color << 8) | c;
 }
 
-int cursor_x = 0;
-int cursor_y = 0;
 void print(char c) {
     switch(c) {
         case '\b':
@@ -66,7 +83,7 @@ void print(char c) {
         scroll();
     }
 
-    // TODO update cursor position
+    update_cursor();
 }
 
 void print(const char* str) {
