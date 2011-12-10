@@ -34,8 +34,8 @@ enum class flag {
 
 // Structure of the information recieved from the multiboot-compliant
 // bootloader (e.g. GRUB)
-// TODO Use alignas(u32) and more useful types with more of the member
-// declarations.
+// TODO Add accessor functions returning the correct type for each
+// members.
 struct info {
     bool hasflag(flag f) {
         return flags & int(f);
@@ -52,7 +52,7 @@ struct info {
 
     // The command line passed to the kernel by the bootloader.
     // Example: /system/spideros.exe
-    alignas(u32) const char* cmdline;
+    u32 cmdline;
 
     // Boot module list
     u32 modules_count, modules_address;
@@ -72,7 +72,7 @@ struct info {
     u32 config_table;
 
     // Bootloader name (e.g. GNU GRUB 0.97)
-    alignas(u32) const char* bootloader_name;
+    u32 bootloader_name;
 
     // APM (Advanced Power Management) table
     u32 apm_table;

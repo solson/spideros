@@ -21,10 +21,12 @@ extern "C" void kmain(multiboot::info* mbinfo, u32 magic) {
     display::println(); // Just a newline.
 
     if(mbinfo->hasflag(multiboot::flag::bootloader_name))
-        display::println("Bootloader:\t", mbinfo->bootloader_name);
+        display::println("Bootloader:\t",
+                (const char*) mbinfo->bootloader_name);
 
     if(mbinfo->hasflag(multiboot::flag::cmdline))
-        display::println("Command line:\t", mbinfo->cmdline);
+        display::println("Command line:\t",
+                (const char*) mbinfo->cmdline);
 
     // Sit around wasting CPU cycles.
     while(true){}
