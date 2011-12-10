@@ -18,11 +18,13 @@ extern "C" void kmain(multiboot::info* mbinfo, u32 magic) {
     const int a = 12, b = 3;
     display::println("Hey look, numbers: ", a, " * ", b, " = ", a * b);
 
+    display::println(); // Just a newline.
+
     if(mbinfo->hasflag(multiboot::flag::bootloader_name))
-        display::println("Bootloader: ", mbinfo->bootloader_name);
+        display::println("Bootloader:\t", mbinfo->bootloader_name);
 
     if(mbinfo->hasflag(multiboot::flag::cmdline))
-        display::println("Command line: ", mbinfo->cmdline);
+        display::println("Command line:\t", mbinfo->cmdline);
 
     // Sit around wasting CPU cycles.
     while(true){}

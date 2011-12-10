@@ -19,11 +19,14 @@ int cursor_y = 0;
 void print(char c) {
 	switch(c) {
 		case '\b':
+            // TODO: Backspace to previous line (except at y=0) and
+            // print a space over the backspaced character.
 			if(cursor_x != 0)
 				cursor_x--;
 			break;
 		case '\t':
-			// TODO Increase cursor_x to a multiple of 8
+            // Align cursor_x to the next multiple of 8
+			cursor_x = cursor_x - (cursor_x % 8) + 8;
 			break;
 		case '\r':
 			cursor_x = 0;
