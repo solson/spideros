@@ -35,7 +35,7 @@ inline void print(First first, Second second, Rest... rest) {
 
 template<typename... Args>
 inline void println(Args... args) {
-	print(args..., '\n');
+    print(args..., '\n');
 }
 
 } // namepspace display

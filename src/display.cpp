@@ -17,40 +17,40 @@ void put_char_at(char c, int x, int y) {
 int cursor_x = 0;
 int cursor_y = 0;
 void print(char c) {
-	switch(c) {
-		case '\b':
+    switch(c) {
+        case '\b':
             // TODO: Backspace to previous line (except at y=0) and
             // print a space over the backspaced character.
-			if(cursor_x != 0)
-				cursor_x--;
-			break;
-		case '\t':
+            if(cursor_x != 0)
+                cursor_x--;
+            break;
+        case '\t':
             // Align cursor_x to the next multiple of 8
-			cursor_x = cursor_x - (cursor_x % 8) + 8;
-			break;
-		case '\r':
-			cursor_x = 0;
-			break;
-		case '\n':
-			cursor_x = 0;
-			cursor_y++;
-			break;
-		default:
-			put_char_at(c, cursor_x, cursor_y);
-			cursor_x++;
-	}
+            cursor_x = cursor_x - (cursor_x % 8) + 8;
+            break;
+        case '\r':
+            cursor_x = 0;
+            break;
+        case '\n':
+            cursor_x = 0;
+            cursor_y++;
+            break;
+        default:
+            put_char_at(c, cursor_x, cursor_y);
+            cursor_x++;
+    }
 
-	if(cursor_x == console_width) {
-		cursor_x = 0;
-		cursor_y++;
-	}
+    if(cursor_x == console_width) {
+        cursor_x = 0;
+        cursor_y++;
+    }
 
-	if(cursor_y == console_height) {
-		cursor_y--;
-		// TODO scroll
-	}
+    if(cursor_y == console_height) {
+        cursor_y--;
+        // TODO scroll
+    }
 
-	// TODO update cursor position
+    // TODO update cursor position
 }
 
 void print(const char* str) {

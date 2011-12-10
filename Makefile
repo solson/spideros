@@ -46,4 +46,4 @@ todolist:
 	@grep --color=auto --exclude=Makefile -r -F -n -e TODO -e FIXME .
 
 clean:
-	 $(RM) $(wildcard $(OBJFILES) spideros.exe spideros.iso)
+	$(RM) $(wildcard $(OBJFILES) spideros.exe spideros.iso)
