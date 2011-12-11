@@ -16,10 +16,6 @@ SECTIONS
         *(.ctor*)
         end_ctors = .;
 
-        start_dtors = .;
-        *(.dtor*)
-        end_dtors = .;
-
         *(.rodata*)
         *(.gnu.linkonce.r*)
     }

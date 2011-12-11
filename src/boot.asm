@@ -1,11 +1,10 @@
 global boot                             ; making entry point visible to linker
 
 extern kmain                            ; kmain is defined in kmain.cpp
+extern __cxa_finalize
 
 extern start_ctors                      ; beginning and end
 extern end_ctors                        ; of the respective
-extern start_dtors                      ; ctors and dtors section,
-extern end_dtors                        ; declared by the linker script
 
 ; setting up the Multiboot header - see GRUB docs for details
 MODULEALIGN equ  1<<0                   ; align loaded modules on page boundaries
@@ -40,14 +39,10 @@ boot:
 
     call kmain                          ; call kernel proper
 
-    mov  ebx, end_dtors                 ; call the destructors
-    jmp  .dtors_until_end
-.call_destructor:
-    sub  ebx, 4
-    call [ebx]
-.dtors_until_end:
-    cmp  ebx, start_dtors
-    jb   .call_destructor
+    sub esp, 4                          ; call the destructors
+    mov [esp], dword 0x0
+    call __cxa_finalize                 ; i.e. __cxa_finalize(nullptr)
+    add esp, 4
 
     cli                                 ; disable interrupts
 .hang:
