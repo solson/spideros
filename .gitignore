@@ -7,7 +7,7 @@
 *.iso
 
 #ignore editor temporary and backup files
-.*.swp
+.*.sw?
 *~
 \#*\#
 .\#*
