@@ -1,6 +1,14 @@
 #include "display.h"
 #include "multiboot.h"
 
+struct test_destructors {
+    const char* str;
+    test_destructors(const char* str_) : str(str_) {}
+    ~test_destructors() { display::println(str, " destructed"); }
+};
+
+test_destructors bar("bar");
+
 extern "C" void kmain(multiboot::info* mbinfo, u32 magic) {
     display::init();
 
@@ -30,7 +38,7 @@ extern "C" void kmain(multiboot::info* mbinfo, u32 magic) {
         display::println("Command line:\t",
                 (const char*) mbinfo->cmdline);
 
-    // Sit around wasting CPU cycles.
-    while(true){}
+    test_destructors foo("foo");
+    test_destructors baz("baz");
 }
 
