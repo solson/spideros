@@ -1,7 +1,7 @@
 #ifndef CPPSUPPORT_H
 #define CPPSUPPORT_H
 
-const int ATEXIT_MAX_FUNCS = 128; // TODO: Why 128? I don't know.
+const unsigned int ATEXIT_MAX_FUNCS = 128; // TODO: Why 128? I don't know.
 
 extern "C" {
 
