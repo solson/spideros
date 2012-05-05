@@ -1,4 +1,4 @@
-CXX := clang++
+CXX := g++
 AS  := nasm
 LD  := ld
 QEMU := qemu-system-i386
