@@ -1,7 +1,6 @@
 #include "cppsupport.h"
 
-// This file implements certain functions required for certain C++
-// features to work.
+// This file implements functions required for certain C++ features to work.
 
 extern "C" {
 
@@ -58,7 +57,7 @@ void __cxa_finalize(void *dso) {
     while(i--) {
         if(__atexit_funcs[i].dso_handle == dso) {
             (*__atexit_funcs[i].destructor)(__atexit_funcs[i].obj_ptr);
-            
+
             // Copy all the higher destructors down one spot to fill the
             // hole in the list due to removing this one.
             for(unsigned j = __atexit_func_count - 1; j > i; j--)
