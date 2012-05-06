@@ -38,6 +38,11 @@ extern "C" void kmain(multiboot::info* mbinfo, u32 magic) {
         display::println("Command line:\t",
                 (const char*) mbinfo->cmdline);
 
+    display::println("Hex: 0x", display::hex(120), '\n',
+                     "Oct: 0",  display::oct(120), '\n',
+                     "Bin: 0b", display::bin(120), '\n',
+                     "Dec: ", 120);
+
     test_destructors foo("foo");
     test_destructors baz("baz");
 }

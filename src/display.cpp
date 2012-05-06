@@ -5,7 +5,7 @@
 namespace display {
 
 // TODO: Use a special element type with color and char members.
-u16 volatile* videoram = (u16 volatile*) 0xb8000;
+u16 *videoram = (u16*) 0xb8000;
 int cursor_x = 0;
 int cursor_y = 0;
 
@@ -26,24 +26,18 @@ void clear_screen() {
 
     cursor_x = 0;
     cursor_y = 0;
-
     update_cursor();
 }
 
 void scroll() {
     // Copy each line onto the one above it.
-    for(int y = 0; y < console_height - 1; y++) {
-        for(int x = 0; x < console_width; x++) {
-            const int target_i = y * console_width + x;
-            const int source_i = (y + 1) * console_width + x;
-            videoram[target_i] = videoram[source_i];
-        }
-    }
+    for(int y = 0; y < console_height - 1; y++)
+        for(int x = 0; x < console_width; x++)
+            cell_at(x, y) = cell_at(x, y + 1);
 
     // Blank out the bottom line.
     for(int x = 0; x < console_width; x++)
-        videoram[(console_height - 1) * console_width + x]
-            = (color << 8) | ' ';
+        cell_at(x, console_height - 1) = (color << 8) | ' ';
 }
 
 // Update the position of the blinking cursor on the screen.
@@ -57,9 +51,7 @@ void update_cursor() {
     ports::outb(data_port, position);
 }
 
-void put_char_at(char c, int x, int y) {
-    videoram[y * console_width + x] = (color << 8) | c;
-}
+u16 &cell_at(int x, int y) { return videoram[y * console_width + x]; }
 
 void print(char c) {
     switch(c) {
@@ -81,7 +73,7 @@ void print(char c) {
             cursor_y++;
             break;
         default:
-            put_char_at(c, cursor_x, cursor_y);
+            cell_at(cursor_x, cursor_y) = (color << 8) | c;
             cursor_x++;
     }
 
@@ -138,9 +130,7 @@ void printInt(u32 n, int radix) {
     }
 }
 
-void print(u32 n) {
-    printInt(n, 10);
-}
+void print(u32 n) { printInt(n, 10); }
 
 void print(i32 n) {
     if(n < 0) {

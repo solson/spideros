@@ -30,20 +30,48 @@ enum class color : u8 {
 };
 
 void init();
-
 void clear_screen();
 void scroll();
 void update_cursor();
+u16 &cell_at(int x, int y);
 void put_char_at(char c, int line, int col);
 
+// Printing functions
+void printInt(u32 n, int radix);
 void print(char c);
 void print(const char* str);
-void print(int x);
-void printInt(u32 n, int radix);
+void print(i32 x);
+void print(u32 x);
+
+// Special number base formatting "tag" struct
+template<typename Int>
+struct int_base_t {
+    Int val;
+    int base;
+    constexpr int_base_t(Int val, int base) : val(val), base(base) {}
+};
+
+template<typename Int>
+inline constexpr int_base_t<Int> hex(Int x) {
+    return int_base_t<Int>(x, 16);
+}
+
+template<typename Int>
+inline constexpr int_base_t<Int> oct(Int x) {
+    return int_base_t<Int>(x, 8);
+}
+
+template<typename Int>
+inline constexpr int_base_t<Int> bin(Int x) {
+    return int_base_t<Int>(x, 2);
+}
+template<typename Int>
+inline void print(int_base_t<Int> x) { printInt(x.val, x.base); }
 
 // No-op base case for the variadic template print function
 inline void print() {}
 
+// Variadic print function which calls print(arg) for each argument it gets.
 template<typename First, typename Second, typename... Rest>
 inline void print(First first, Second second, Rest... rest) {
     print(first);
@@ -51,6 +79,7 @@ inline void print(First first, Second second, Rest... rest) {
     print(rest...);
 }
 
+// Variadic print function that adds a newline at the end.
 template<typename... Args>
 inline void println(Args... args) {
     print(args..., '\n');
