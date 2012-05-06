@@ -5,7 +5,7 @@
 namespace display {
 
 // TODO: Use a special element type with color and char members.
-u16 *videoram = (u16*) 0xb8000;
+u16 *videoram = reinterpret_cast<u16 *>(0xb8000);
 int cursor_x = 0;
 int cursor_y = 0;
 
@@ -15,7 +15,7 @@ int data_port;
 void init() {
     // Find the base IO port for video from the BIOS Data Area. See
     // http://wiki.osdev.org/Memory_Map_%28x86%29#BIOS_Data_Area_.28BDA.29
-    u16 volatile* base_io_port = (u16 volatile*) 0x0463;
+    u16 volatile *base_io_port = reinterpret_cast<u16 volatile *>(0x0463);
     index_port = *base_io_port;
     data_port = index_port + 1;
 }
