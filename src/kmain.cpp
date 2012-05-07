@@ -1,5 +1,6 @@
 #include "display.h"
 #include "multiboot.h"
+#include "gdt.h"
 
 struct test_destructors {
     const char* str;
@@ -42,6 +43,9 @@ extern "C" void kmain(multiboot::info* mbinfo, u32 magic) {
                      "Oct: 0",  display::oct(120), '\n',
                      "Bin: 0b", display::bin(120), '\n',
                      "Dec: ", 120);
+
+    display::println("Initializing GDT...");
+    gdt::init();
 
     test_destructors foo("foo");
     test_destructors baz("baz");
