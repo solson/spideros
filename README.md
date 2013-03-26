@@ -11,7 +11,7 @@ Just `make`.
 Running in a VM
 ---------------
 Install [qemu](http://wiki.qemu.org/) or [bochs](http://bochs.sourceforge.net/)
-and run `make qmeu` or`make bochs`.
+and run `make qemu` or`make bochs`.
 
 Running on Real Hardware
 ------------------------
