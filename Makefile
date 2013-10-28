@@ -8,7 +8,8 @@ CXXFLAGS := -include src/prelude.h -std=c++0x -m32 -Wall -Wextra -Werror \
 ASFLAGS := -felf32 -g
 LDFLAGS := -melf_i386 -nostdlib -g
 
-STAGE2 := /boot/grub/stage2_eltorito
+# Needs to be overridden in some operating systems
+GRUB_MKRESCUE := grub-mkrescue
 
 CXXFILES := $(shell find "src" -name "*.cpp")
 HDRFILES := $(shell find "src" -name "*.h")
@@ -23,12 +24,12 @@ bochs: spideros.iso
 	@bochs -qf .bochsrc
 
 qemu: spideros.iso
-	@$(QEMU) -cdrom spideros.iso -net none
+	@$(QEMU) -cdrom $< -net none
 
-spideros.iso: spideros.exe isofs/boot/grub/stage2_eltorito isofs/boot/grub/menu.lst
+spideros.iso: spideros.exe isofs/boot/grub/grub.cfg
 	@mkdir -p isofs/system
 	cp $< isofs/system
-	genisoimage -R -b boot/grub/stage2_eltorito -no-emul-boot -boot-load-size 4 -boot-info-table -input-charset utf-8 -o $@ isofs
+	grub-mkrescue -o $@ isofs
 
 spideros.exe: ${OBJFILES}
 	${LD} ${LDFLAGS} -T linker.ld -o $@ $^
@@ -39,12 +40,8 @@ spideros.exe: ${OBJFILES}
 %.o: %.asm
 	$(AS) ${ASFLAGS} -o $@ $<
 
-isofs/boot/grub/stage2_eltorito:
-	@mkdir -p isofs/boot/grub
-	cp ${STAGE2} $@
-
 todolist:
 	@grep --color=auto --exclude=Makefile -r -F -n -I -e TODO -e FIXME src
 
 clean:
-	$(RM) $(wildcard $(OBJFILES) spideros.exe spideros.iso)
+	$(RM) $(wildcard $(OBJFILES) spideros.exe spideros.iso isofs/system/spideros.exe)
