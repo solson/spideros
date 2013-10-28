@@ -1,6 +1,0 @@
-default 0
-timeout 0
-color light-red/black light-red/red
-
-title SpiderOS
-kernel /system/spideros.exe
