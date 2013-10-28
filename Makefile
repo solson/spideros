@@ -31,14 +31,14 @@ spideros.iso: spideros.exe isofs/boot/grub/grub.cfg
 	cp $< isofs/system
 	grub-mkrescue -o $@ isofs
 
-spideros.exe: ${OBJFILES}
-	${LD} ${LDFLAGS} -T linker.ld -o $@ $^
+spideros.exe: $(OBJFILES)
+	$(LD) $(LDFLAGS) -T linker.ld -o $@ $^
 
 %.o: %.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 %.o: %.asm
-	$(AS) ${ASFLAGS} -o $@ $<
+	$(AS) $(ASFLAGS) -o $@ $<
 
 todolist:
 	@grep --color=auto --exclude=Makefile -r -F -n -I -e TODO -e FIXME src
