@@ -1,6 +1,8 @@
 #ifndef DISPLAY_H
 #define DISPLAY_H
 
+#include "types.h"
+
 namespace display {
 
 const int console_width = 80;

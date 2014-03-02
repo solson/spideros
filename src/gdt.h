@@ -1,6 +1,8 @@
 #ifndef GDT_H
 #define GDT_H
 
+#include "types.h"
+
 // See http://wiki.osdev.org/GDT, or none of this will make any sense
 
 namespace gdt {

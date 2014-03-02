@@ -1,6 +1,8 @@
 #ifndef PORTS_H
 #define PORTS_H
 
+#include "types.h"
+
 namespace ports {
 
 void outb(u16 port, u8  val);

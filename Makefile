@@ -3,8 +3,8 @@ AS  := nasm
 LD  := ld
 QEMU := qemu-system-i386
 
-CXXFLAGS := -include src/prelude.h -std=c++0x -m32 -Wall -Wextra -Werror \
-	-nostdlib -fno-builtin -fno-exceptions -fno-rtti -fno-stack-protector
+CXXFLAGS := -std=c++11 -m32 -Wall -Wextra -Werror -nostdlib -fno-builtin \
+	-fno-exceptions -fno-rtti -fno-stack-protector
 ASFLAGS := -felf32 -g
 LDFLAGS := -melf_i386 -nostdlib -g
 
@@ -27,18 +27,22 @@ qemu: spideros.iso
 	@$(QEMU) -cdrom $< -net none
 
 spideros.iso: spideros.exe isofs/boot/grub/grub.cfg
+	@echo "ISO spideros.iso"
 	@mkdir -p isofs/system
-	cp $< isofs/system
-	grub-mkrescue -o $@ isofs
+	@cp $< isofs/system
+	@grub-mkrescue -o $@ isofs 2> /dev/null
 
 spideros.exe: $(OBJFILES)
-	$(LD) $(LDFLAGS) -T linker.ld -o $@ $^
+	@echo "LD  $@"
+	@$(LD) $(LDFLAGS) -T linker.ld -o $@ $^
 
 %.o: %.cpp
-	$(CXX) $(CXXFLAGS) -c $< -o $@
+	@echo "CXX $<"
+	@$(CXX) $(CXXFLAGS) -c $< -o $@
 
 %.o: %.asm
-	$(AS) $(ASFLAGS) -o $@ $<
+	@echo "ASM $<"
+	@$(AS) $(ASFLAGS) -o $@ $<
 
 todolist:
 	@grep --color=auto --exclude=Makefile -r -F -n -I -e TODO -e FIXME src

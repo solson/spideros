@@ -1,3 +1,4 @@
+#include "types.h"
 #include "display.h"
 #include "multiboot.h"
 #include "gdt.h"
