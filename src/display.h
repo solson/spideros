@@ -18,37 +18,36 @@ const int cursorLowPort  = 0x0E;
 const int cursorHighPort = 0x0F;
 
 extern int cursorX, cursorY;
+extern u8 color;
 
-// TODO: Allow the color to be changed.
-const u8 color = 0x07; /* light grey (7) on black (0). */
-
-enum class color : u8 {
+enum class Color : u8 {
     // Bright bit unset
-    black = 0,
-    blue,
-    green,
-    cyan,
-    red,
-    magenta,
-    brown,
-    lightGrey,
+    BLACK = 0,
+    BLUE,
+    GREEN,
+    CYAN,
+    RED,
+    MAGENTA,
+    BROWN,
+    LIGHT_GREY,
 
     // Bright bit set
-    darkGrey,
-    lightBlue,
-    lightGreen,
-    lightCyan,
-    lightRed,
-    lightMagenta,
-    yellow,
-    white
+    DARK_GREY,
+    LIGHT_BLUE,
+    LIGHT_GREEN,
+    LIGHT_CYAN,
+    LIGHT_RED,
+    LIGHT_MAGENTA,
+    YELLOW,
+    WHITE
 };
 
 void init();
 void clearScreen();
 void scroll();
 void updateCursor();
-u16 &cellAt(int x, int y);
+u16& cellAt(int x, int y);
+void setColor(Color fg, Color bg);
 
 // Printing functions
 void printInt(u32 n, int radix);

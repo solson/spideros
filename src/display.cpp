@@ -9,6 +9,7 @@ namespace display {
 u16* videoram = reinterpret_cast<u16*>(0xb8000);
 int cursorX = 0;
 int cursorY = 0;
+u8 color;
 
 int indexPort;
 int dataPort;
@@ -19,6 +20,12 @@ void init() {
     u16 volatile* baseIoPort = reinterpret_cast<u16 volatile*>(0x0463);
     indexPort = *baseIoPort;
     dataPort  = *baseIoPort + 1;
+
+    setColor(Color::LIGHT_GREY, Color::BLACK);
+}
+
+void setColor(Color fg, Color bg) {
+    color = (u8(bg) << 4) | (u8(fg) & 0x0F);
 }
 
 void clearScreen() {
