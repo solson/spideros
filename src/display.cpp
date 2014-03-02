@@ -54,27 +54,35 @@ void update_cursor() {
 
 u16 &cell_at(int x, int y) { return videoram[y * console_width + x]; }
 
+void printAt(char c, int x, int y)
+{
+    cell_at(x, y) = (color << 8) | c;
+}
+
 void print(char c) {
     switch(c) {
         case '\b':
-            // TODO: Backspace to previous line (except at y=0) and
-            // print a space over the backspaced character.
             if(cursor_x != 0)
                 cursor_x--;
+            printAt(' ', cursor_x, cursor_y);
             break;
+
         case '\t':
             // Align cursor_x to the next multiple of 8
             cursor_x = cursor_x - (cursor_x % 8) + 8;
             break;
+
         case '\r':
             cursor_x = 0;
             break;
+
         case '\n':
             cursor_x = 0;
             cursor_y++;
             break;
+
         default:
-            cell_at(cursor_x, cursor_y) = (color << 8) | c;
+            printAt(c, cursor_x, cursor_y);
             cursor_x++;
     }
 

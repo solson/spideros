@@ -53,6 +53,7 @@ void put_char_at(char c, int line, int col);
 
 // Printing functions
 void printInt(u32 n, int radix);
+void printAt(char c, int x, int y);
 void print(char c);
 void print(const char* str);
 void print(i32 x);
