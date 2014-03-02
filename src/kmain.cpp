@@ -14,7 +14,7 @@ TestDestructors bar("bar");
 extern "C" void kmain(multiboot::Info* mbinfo, u32 magic) {
     display::init();
 
-    if(magic != multiboot::bootloaderMagic) {
+    if(magic != multiboot::BOOTLOADER_MAGIC) {
         // Something went not according to specs. Do not rely on the
         // multiboot data structure.
         display::println("error: The bootloader's magic number didn't "
@@ -32,11 +32,11 @@ extern "C" void kmain(multiboot::Info* mbinfo, u32 magic) {
 
     display::println(); // Just a newline.
 
-    if(mbinfo->hasFlag(multiboot::flag::bootloaderName))
+    if(mbinfo->hasFlag(multiboot::BOOTLOADER_NAME))
         display::println("Bootloader:\t",
                 (const char*) mbinfo->bootloaderName);
 
-    if(mbinfo->hasFlag(multiboot::flag::commandLine))
+    if(mbinfo->hasFlag(multiboot::COMMAND_LINE))
         display::println("Command line:\t",
                 (const char*) mbinfo->commandLine);
 

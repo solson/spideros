@@ -6,7 +6,7 @@
 namespace multiboot {
 
 // The magic number passed by the bootloader to the operating system.
-const u32 bootloaderMagic = 0x2BADB002;
+const u32 BOOTLOADER_MAGIC = 0x2BADB002;
 
 struct AoutSymbolTable {
     u32 tabsize, strsize, addr, reserved;
@@ -17,19 +17,19 @@ struct ElfSectionHeaderTable {
 };
 
 // The different possible flags in the flags member
-enum class flag {
-    memory                = 1<<0,
-    bootDevice            = 1<<1,
-    commandLine           = 1<<2,
-    modules               = 1<<3,
-    aoutSymbolTable       = 1<<4, // These two are
-    elfSectionHeaderTable = 1<<5, // mutually exclusive.
-    memoryMap             = 1<<6,
-    driveInfo             = 1<<7,
-    configTable           = 1<<8,
-    bootloaderName        = 1<<9,
-    apmTable              = 1<<10,
-    videoInfo             = 1<<11
+enum Flag {
+    MEMORY                   = 1 << 0,
+    BOOT_DEVICE              = 1 << 1,
+    COMMAND_LINE             = 1 << 2,
+    MODULES                  = 1 << 3,
+    AOUT_SYMBOL_TABLE        = 1 << 4, // These two are
+    ELF_SECTION_HEADER_TABLE = 1 << 5, // mutually exclusive.
+    MEMORY_MAP               = 1 << 6,
+    DRIVE_INFO               = 1 << 7,
+    CONFIG_TABLE             = 1 << 8,
+    BOOTLOADER_NAME          = 1 << 9,
+    APM_TABLE                = 1 << 10,
+    VIDEO_INFO               = 1 << 11
 };
 
 // Structure of the information recieved from the multiboot-compliant
@@ -37,7 +37,7 @@ enum class flag {
 // TODO Add accessor functions returning the correct type for each
 // members.
 struct Info {
-    bool hasFlag(flag f) {
+    bool hasFlag(Flag f) {
         return flags & int(f);
     }
 
