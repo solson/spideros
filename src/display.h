@@ -24,11 +24,24 @@ const u8 color = 0x07; /* light grey (7) on black (0). */
 
 enum class color : u8 {
     // Bright bit unset
-    black = 0, blue, green, cyan,
-    red, magenta, brown, light_grey,
+    black = 0,
+    blue,
+    green,
+    cyan,
+    red,
+    magenta,
+    brown,
+    light_grey,
+
     // Bright bit set
-    dark_grey, light_blue, light_green, light_cyan,
-    light_red, light_magenta, yellow, white
+    dark_grey,
+    light_blue,
+    light_green,
+    light_cyan,
+    light_red,
+    light_magenta,
+    yellow,
+    white
 };
 
 void init();
