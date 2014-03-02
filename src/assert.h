@@ -15,11 +15,11 @@
 
 #define assert(expr)    \
     if(!(expr))         \
-        assert_fail(#expr, __FILE__, MACRO_STRING(__LINE__), __PRETTY_FUNCTION__);
+        assertFail(#expr, __FILE__, MACRO_STRING(__LINE__), __PRETTY_FUNCTION__);
 
 #endif /* NDEBUG */
 
-void assert_fail(const char* expr, const char* file, const char* line,
+void assertFail(const char* expr, const char* file, const char* line,
     const char* function);
 
 #endif /* ASSERT_H */

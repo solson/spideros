@@ -3,18 +3,18 @@
 #include "multiboot.h"
 #include "gdt.h"
 
-struct test_destructors {
+struct TestDestructors {
     const char* str;
-    test_destructors(const char* str_) : str(str_) {}
-    ~test_destructors() { display::println(str, " destructed"); }
+    TestDestructors(const char* str_) : str(str_) {}
+    ~TestDestructors() { display::println(str, " destructed"); }
 };
 
-test_destructors bar("bar");
+TestDestructors bar("bar");
 
-extern "C" void kmain(multiboot::info* mbinfo, u32 magic) {
+extern "C" void kmain(multiboot::Info* mbinfo, u32 magic) {
     display::init();
 
-    if(magic != multiboot::bootloader_magic) {
+    if(magic != multiboot::bootloaderMagic) {
         // Something went not according to specs. Do not rely on the
         // multiboot data structure.
         display::println("error: The bootloader's magic number didn't "
@@ -23,7 +23,7 @@ extern "C" void kmain(multiboot::info* mbinfo, u32 magic) {
     }
 
     // Print to screen to see everything is working.
-    display::clear_screen();
+    display::clearScreen();
     display::println("Welcome to SpiderOS!");
     display::println("====================");
     display::println("This is", " a", ' ', 't', "est", '!');
@@ -32,13 +32,13 @@ extern "C" void kmain(multiboot::info* mbinfo, u32 magic) {
 
     display::println(); // Just a newline.
 
-    if(mbinfo->hasflag(multiboot::flag::bootloader_name))
+    if(mbinfo->hasFlag(multiboot::flag::bootloaderName))
         display::println("Bootloader:\t",
-                (const char*) mbinfo->bootloader_name);
+                (const char*) mbinfo->bootloaderName);
 
-    if(mbinfo->hasflag(multiboot::flag::cmdline))
+    if(mbinfo->hasFlag(multiboot::flag::commandLine))
         display::println("Command line:\t",
-                (const char*) mbinfo->cmdline);
+                (const char*) mbinfo->commandLine);
 
     display::println("Hex: 0x", display::hex(120), '\n',
                      "Oct: 0",  display::oct(120), '\n',
@@ -48,7 +48,7 @@ extern "C" void kmain(multiboot::info* mbinfo, u32 magic) {
     display::println("Initializing GDT...");
     gdt::init();
 
-    test_destructors foo("foo");
-    test_destructors baz("baz");
+    TestDestructors foo("foo");
+    TestDestructors baz("baz");
 }
 

@@ -5,19 +5,19 @@
 
 namespace display {
 
-const int console_width = 80;
-const int console_height = 25;
+const int consoleWidth = 80;
+const int consoleHeight = 25;
 
 // Display-related I/O ports. They are taken from the BIOS Data Area
 // during init();
-extern int index_port;
-extern int data_port;
+extern int indexPort;
+extern int dataPort;
 
 // Indexes for the index_port
-const int cursor_low_port  = 0x0E;
-const int cursor_high_port = 0x0F;
+const int cursorLowPort  = 0x0E;
+const int cursorHighPort = 0x0F;
 
-extern int cursor_x, cursor_y;
+extern int cursorX, cursorY;
 
 // TODO: Allow the color to be changed.
 const u8 color = 0x07; /* light grey (7) on black (0). */
@@ -31,25 +31,24 @@ enum class color : u8 {
     red,
     magenta,
     brown,
-    light_grey,
+    lightGrey,
 
     // Bright bit set
-    dark_grey,
-    light_blue,
-    light_green,
-    light_cyan,
-    light_red,
-    light_magenta,
+    darkGrey,
+    lightBlue,
+    lightGreen,
+    lightCyan,
+    lightRed,
+    lightMagenta,
     yellow,
     white
 };
 
 void init();
-void clear_screen();
+void clearScreen();
 void scroll();
-void update_cursor();
-u16 &cell_at(int x, int y);
-void put_char_at(char c, int line, int col);
+void updateCursor();
+u16 &cellAt(int x, int y);
 
 // Printing functions
 void printInt(u32 n, int radix);
@@ -61,28 +60,31 @@ void print(u32 x);
 
 // Special number base formatting "tag" struct
 template<typename Int>
-struct int_base_t {
+struct IntBase {
     Int val;
     int base;
-    constexpr int_base_t(Int val, int base) : val(val), base(base) {}
+    constexpr IntBase(Int val, int base) : val(val), base(base) {}
 };
 
 template<typename Int>
-inline constexpr int_base_t<Int> hex(Int x) {
-    return int_base_t<Int>(x, 16);
+inline constexpr IntBase<Int> hex(Int x) {
+    return IntBase<Int>(x, 16);
 }
 
 template<typename Int>
-inline constexpr int_base_t<Int> oct(Int x) {
-    return int_base_t<Int>(x, 8);
+inline constexpr IntBase<Int> oct(Int x) {
+    return IntBase<Int>(x, 8);
 }
 
 template<typename Int>
-inline constexpr int_base_t<Int> bin(Int x) {
-    return int_base_t<Int>(x, 2);
+inline constexpr IntBase<Int> bin(Int x) {
+    return IntBase<Int>(x, 2);
 }
+
 template<typename Int>
-inline void print(int_base_t<Int> x) { printInt(x.val, x.base); }
+inline void print(IntBase<Int> x) {
+    printInt(x.val, x.base);
+}
 
 // No-op base case for the variadic template print function
 inline void print() {}

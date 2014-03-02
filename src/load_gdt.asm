@@ -1,11 +1,11 @@
 bits 32
 
-global load_gdt
+global loadGDT
 
 section .text
 
-;;; void load_gdt(gdt::gdt_ptr*)
-load_gdt:
+;;; void loadGDT(gdt::GdtPtr*)
+loadGDT:
    push eax
    mov eax, [esp+0x8] ; get the struct pointer
    lgdt [eax] ; load the GDT
@@ -21,6 +21,6 @@ load_gdt:
    mov fs, ax
    mov gs, ax
    mov ss, ax
-   ;; return from load_gdt
+   ;; return from loadGDT
    ret
 

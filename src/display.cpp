@@ -6,97 +6,98 @@
 namespace display {
 
 // TODO: Use a special element type with color and char members.
-u16 *videoram = reinterpret_cast<u16 *>(0xb8000);
-int cursor_x = 0;
-int cursor_y = 0;
+u16* videoram = reinterpret_cast<u16*>(0xb8000);
+int cursorX = 0;
+int cursorY = 0;
 
-int index_port;
-int data_port;
+int indexPort;
+int dataPort;
 
 void init() {
     // Find the base IO port for video from the BIOS Data Area. See
     // http://wiki.osdev.org/Memory_Map_%28x86%29#BIOS_Data_Area_.28BDA.29
-    u16 volatile *base_io_port = reinterpret_cast<u16 volatile *>(0x0463);
-    index_port = *base_io_port;
-    data_port = index_port + 1;
+    u16 volatile* baseIoPort = reinterpret_cast<u16 volatile*>(0x0463);
+    indexPort = *baseIoPort;
+    dataPort  = *baseIoPort + 1;
 }
 
-void clear_screen() {
-    for(int i = 0; i < console_height * console_width; i++)
+void clearScreen() {
+    for(int i = 0; i < consoleHeight * consoleWidth; i++)
         videoram[i] = (color << 8) | ' ';
 
-    cursor_x = 0;
-    cursor_y = 0;
-    update_cursor();
+    cursorX = 0;
+    cursorY = 0;
+    updateCursor();
 }
 
 void scroll() {
     // Copy each line onto the one above it.
-    for(int y = 0; y < console_height - 1; y++)
-        for(int x = 0; x < console_width; x++)
-            cell_at(x, y) = cell_at(x, y + 1);
+    for(int y = 0; y < consoleHeight - 1; y++)
+        for(int x = 0; x < consoleWidth; x++)
+            cellAt(x, y) = cellAt(x, y + 1);
 
     // Blank out the bottom line.
-    for(int x = 0; x < console_width; x++)
-        cell_at(x, console_height - 1) = (color << 8) | ' ';
+    for(int x = 0; x < consoleWidth; x++)
+        cellAt(x, consoleHeight - 1) = (color << 8) | ' ';
 }
 
 // Update the position of the blinking cursor on the screen.
-void update_cursor() {
-    const int position = cursor_y * console_width + cursor_x;
+void updateCursor() {
+    const int position = cursorY * consoleWidth + cursorX;
 
-    ports::outb(index_port, cursor_low_port);
-    ports::outb(data_port, position >> 8);
+    ports::outb(indexPort, cursorLowPort);
+    ports::outb(dataPort, position >> 8);
 
-    ports::outb(index_port, cursor_high_port);
-    ports::outb(data_port, position);
+    ports::outb(indexPort, cursorHighPort);
+    ports::outb(dataPort, position);
 }
 
-u16 &cell_at(int x, int y) { return videoram[y * console_width + x]; }
+u16& cellAt(int x, int y) {
+    return videoram[y * consoleWidth + x];
+}
 
-void printAt(char c, int x, int y)
-{
-    cell_at(x, y) = (color << 8) | c;
+void printAt(char c, int x, int y) {
+    cellAt(x, y) = (color << 8) | c;
 }
 
 void print(char c) {
     switch(c) {
         case '\b':
-            if(cursor_x != 0)
-                cursor_x--;
-            printAt(' ', cursor_x, cursor_y);
+            if(cursorX != 0)
+                cursorX--;
+            printAt(' ', cursorX, cursorY);
             break;
 
         case '\t':
             // Align cursor_x to the next multiple of 8
-            cursor_x = cursor_x - (cursor_x % 8) + 8;
+            cursorX = cursorX - (cursorX % 8) + 8;
             break;
 
         case '\r':
-            cursor_x = 0;
+            cursorX = 0;
             break;
 
         case '\n':
-            cursor_x = 0;
-            cursor_y++;
+            cursorX = 0;
+            cursorY++;
             break;
 
         default:
-            printAt(c, cursor_x, cursor_y);
-            cursor_x++;
+            printAt(c, cursorX, cursorY);
+            cursorX++;
     }
 
-    if(cursor_x == console_width) {
-        cursor_x = 0;
-        cursor_y++;
+    if(cursorX == consoleWidth) {
+        cursorX = 0;
+        cursorY++;
     }
 
-    if(cursor_y == console_height) {
-        cursor_y--;
+    if(cursorY == consoleHeight) {
+        cursorY--;
         scroll();
     }
 
-    update_cursor();
+    updateCursor();
 }
 
 void print(const char* str) {
@@ -139,7 +140,9 @@ void printInt(u32 n, int radix) {
     }
 }
 
-void print(u32 n) { printInt(n, 10); }
+void print(u32 n) {
+    printInt(n, 10);
+}
 
 void print(i32 n) {
     if(n < 0) {

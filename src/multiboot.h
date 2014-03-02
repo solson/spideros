@@ -6,38 +6,38 @@
 namespace multiboot {
 
 // The magic number passed by the bootloader to the operating system.
-const u32 bootloader_magic = 0x2BADB002;
+const u32 bootloaderMagic = 0x2BADB002;
 
-struct aout_symbol_table_t {
+struct AoutSymbolTable {
     u32 tabsize, strsize, addr, reserved;
 };
 
-struct elf_section_header_table_t {
+struct ElfSectionHeaderTable {
     u32 num, size, addr, shndx;
 };
 
 // The different possible flags in the flags member
 enum class flag {
-    memory                   = 1<<0,
-    boot_device              = 1<<1,
-    cmdline                  = 1<<2,
-    modules                  = 1<<3,
-    aout_symbol_table        = 1<<4, // These two are
-    elf_section_header_table = 1<<5, // mutually exclusive.
-    memory_map               = 1<<6,
-    drive_info               = 1<<7,
-    config_table             = 1<<8,
-    bootloader_name          = 1<<9,
-    apm_table                = 1<<10,
-    video_info               = 1<<11
+    memory                = 1<<0,
+    bootDevice            = 1<<1,
+    commandLine           = 1<<2,
+    modules               = 1<<3,
+    aoutSymbolTable       = 1<<4, // These two are
+    elfSectionHeaderTable = 1<<5, // mutually exclusive.
+    memoryMap             = 1<<6,
+    driveInfo             = 1<<7,
+    configTable           = 1<<8,
+    bootloaderName        = 1<<9,
+    apmTable              = 1<<10,
+    videoInfo             = 1<<11
 };
 
 // Structure of the information recieved from the multiboot-compliant
 // bootloader (e.g. GRUB)
 // TODO Add accessor functions returning the correct type for each
 // members.
-struct info {
-    bool hasflag(flag f) {
+struct Info {
+    bool hasFlag(flag f) {
         return flags & int(f);
     }
 
@@ -45,69 +45,68 @@ struct info {
     u32 flags;
 
     // Available memory from BIOS (in kilobytes)
-    u32 memory_lower, memory_higher;
+    u32 memoryLower, memoryHigher;
 
     // Boot device which was used to boot the kernel.
-    u32 boot_device;
+    u32 bootDevice;
 
     // The command line passed to the kernel by the bootloader.
     // Example: /system/spideros.exe
-    u32 cmdline;
+    u32 commandLine;
 
     // Boot module list
-    u32 modules_count, modules_address;
+    u32 modulesCount, modulesAddress;
 
     union {
-        aout_symbol_table_t aout_symbol_table;
-        elf_section_header_table_t elf_section_header_table;
+        AoutSymbolTable aoutSymbolTable;
+        ElfSectionHeaderTable elfSectionHeaderTable;
     };
 
     // Memory mapping buffer
-    u32 mmap_length, mmap_address;
+    u32 mmapLength, mmapAddress;
 
     // Drive info buffer
-    u32 drives_length, drives_address;
+    u32 drivesLength, drivesAddress;
 
     // ROM configuration table
-    u32 config_table;
+    u32 configTable;
 
     // Bootloader name (e.g. GNU GRUB 0.97)
-    u32 bootloader_name;
+    u32 bootloaderName;
 
     // APM (Advanced Power Management) table
-    u32 apm_table;
+    u32 apmTable;
 
     // Video
-    u32 vbe_control_info, vbe_mode_info;
-    u16 vbe_mode, vbe_interface_seg, vbe_interface_off,
-        vbe_interface_len;
+    u32 vbeControlInfo, vbeModeInfo;
+    u16 vbeMode, vbeInterfaceSeg, vbeInterfaceOff, vbeInterfaceLen;
 };
 
 // Structure of an entry in the multiboot memory mapping buffer
-struct mmap_entry {
+struct MmapEntry {
     // Size of the structure (not counting the size member itself)
     u32 size;
 
     // Memory region starting address (address_high only for 64-bit)
-    u32 address_low, address_high;
+    u32 addressLow, addressHigh;
 
     // Memory region length (length_high only for 64-bit)
-    u32 length_low, length_high;
+    u32 lengthLow, lengthHigh;
 
     // Type of memory (1 means available, 2 means reserved)
     u32 type;
 };
 
 // Structure of a module in the multiboot boot module list
-struct module_list {
+struct ModuleList {
     // The memory goes from module_start to module_end-1 inclusive.
-    u32 module_start, module_end;
+    u32 moduleStart, moduleEnd;
 
     // Command line given to the module
-    u32 cmdline;
+    u32 commandLine;
 
     // Padding to take it to 16 bytes (must be zero)
-    u32 pad;
+    u32 padding;
 };
 
 } // namespace multiboot

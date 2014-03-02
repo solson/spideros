@@ -8,19 +8,19 @@
 namespace gdt {
 
 // Pointer to the Global Descriptor Table for the lgdt operation
-struct gdt_ptr {
+struct GdtPtr {
     u16 size;
     u32 offset;
 } __attribute__((packed));
 
 // Structure for entries in the Global Descriptor Table
-struct entry {
-    u16 limit0_15;
-    u16 base0_15;
-    u8 base16_23;
-    u8 access_byte;
-    u8 flags_limit16_19;
-    u8 base24_31;
+struct Entry {
+    u16 limitLow;       // limit 0..15
+    u16 baseLow;        // base 0..15
+    u8 baseMid;         // base 16..23
+    u8 accessByte;
+    u8 flags_limitHigh; // limit 16..19
+    u8 baseHigh;        // base 24..31
 } __attribute__((packed));
 
 // Number of entries in the GDT.
@@ -50,8 +50,8 @@ enum {
 };
 
 void init();
-void new_entry(u32 base, u32 limit, u8 access_byte, u8 flags);
-extern "C" void load_gdt(gdt_ptr *gp);
+void addEntry(u32 base, u32 limit, u8 accessByte, u8 flags);
+extern "C" void loadGDT(GdtPtr* gp);
 
 }
 

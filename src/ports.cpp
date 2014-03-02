@@ -26,7 +26,6 @@ u16 inw(u16 port) {
     return val;
 }
 
-
 u32 inl(u16 port) {
     u32 val;
     asm volatile("inl %1, %0" : "=a"(val) : "d"(port));
@@ -34,4 +33,3 @@ u32 inl(u16 port) {
 }
 
 } // namespace ports
-

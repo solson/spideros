@@ -20,11 +20,11 @@ void __cxa_pure_virtual() {
 atexit_func_entry __atexit_funcs[ATEXIT_MAX_FUNCS];
 unsigned __atexit_func_count = 0;
 
-void *__dso_handle = 0; // TODO: According to OSDev, optimally, you
+void* __dso_handle = 0; // TODO: According to OSDev, optimally, you
                         // should remove the '= 0' part and define this
                         // in your asm script.
 
-int __cxa_atexit(void (*destructor)(void*), void *obj_ptr, void *dso) {
+int __cxa_atexit(void (*destructor)(void*), void* obj_ptr, void* dso) {
     if(__atexit_func_count >= ATEXIT_MAX_FUNCS)
         return -1; // Non-success
     __atexit_funcs[__atexit_func_count].destructor = destructor;
@@ -34,7 +34,7 @@ int __cxa_atexit(void (*destructor)(void*), void *obj_ptr, void *dso) {
     return 0; // Success
 }
 
-void __cxa_finalize(void *dso) {
+void __cxa_finalize(void* dso) {
     // According to the Itanium C++ ABI, if NULL is passed, all
     // destructors should be called. This will definitely happen after
     // kmain returns. Note that the destructors must be called in the
