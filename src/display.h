@@ -13,7 +13,7 @@ const int consoleHeight = 25;
 extern int indexPort;
 extern int dataPort;
 
-// Indexes for the index_port
+// Indexes for the index port
 const int cursorLowPort  = 0x0E;
 const int cursorHighPort = 0x0F;
 
