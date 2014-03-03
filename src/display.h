@@ -42,11 +42,19 @@ enum class Color : u8 {
     WHITE
 };
 
+// A cell in text video memory. Do not reorder the fields.
+struct Cell {
+    u8 character;
+    u8 color;
+
+    Cell(u8 color, u8 character) : character(character), color(color) {}
+};
+
 void init();
 void clearScreen();
 void scroll();
 void updateCursor();
-u16& cellAt(int x, int y);
+Cell& cellAt(int x, int y);
 void setColor(Color fg, Color bg);
 
 // Printing functions

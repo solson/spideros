@@ -33,12 +33,10 @@ extern "C" void kmain(multiboot::Info* mbinfo, u32 magic) {
     display::println(); // Just a newline.
 
     if(mbinfo->hasFlag(multiboot::BOOTLOADER_NAME))
-        display::println("Bootloader:\t",
-                (const char*) mbinfo->bootloaderName);
+        display::println("Bootloader:\t", (const char*) mbinfo->bootloaderName);
 
     if(mbinfo->hasFlag(multiboot::COMMAND_LINE))
-        display::println("Command line:\t",
-                (const char*) mbinfo->commandLine);
+        display::println("Command line:\t", (const char*) mbinfo->commandLine);
 
     display::println("Hex: 0x", display::hex(120), '\n',
                      "Oct: 0",  display::oct(120), '\n',

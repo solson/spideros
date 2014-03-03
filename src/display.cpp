@@ -5,8 +5,7 @@
 
 namespace display {
 
-// TODO: Use a special element type with color and char members.
-u16* videoram = reinterpret_cast<u16*>(0xb8000);
+Cell* videoram = reinterpret_cast<Cell*>(0xb8000);
 int cursorX = 0;
 int cursorY = 0;
 u8 color;
@@ -30,7 +29,7 @@ void setColor(Color fg, Color bg) {
 
 void clearScreen() {
     for(int i = 0; i < consoleHeight * consoleWidth; i++)
-        videoram[i] = (color << 8) | ' ';
+        videoram[i] = Cell(color, ' ');
 
     cursorX = 0;
     cursorY = 0;
@@ -45,7 +44,7 @@ void scroll() {
 
     // Blank out the bottom line.
     for(int x = 0; x < consoleWidth; x++)
-        cellAt(x, consoleHeight - 1) = (color << 8) | ' ';
+        cellAt(x, consoleHeight - 1) = Cell(color, ' ');
 }
 
 // Update the position of the blinking cursor on the screen.
@@ -59,12 +58,12 @@ void updateCursor() {
     ports::outb(dataPort, position);
 }
 
-u16& cellAt(int x, int y) {
+Cell& cellAt(int x, int y) {
     return videoram[y * consoleWidth + x];
 }
 
 void printAt(char c, int x, int y) {
-    cellAt(x, y) = (color << 8) | c;
+    cellAt(x, y) = Cell(color, c);
 }
 
 void print(char c) {
