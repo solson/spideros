@@ -2,6 +2,7 @@
 #include "display.h"
 #include "multiboot.h"
 #include "gdt.h"
+#include "idt.h"
 
 extern "C" void kmain(const multiboot::Info* mbinfo, u32 magic) {
     display::init();
@@ -38,5 +39,9 @@ extern "C" void kmain(const multiboot::Info* mbinfo, u32 magic) {
 
     display::print("Initializing GDT... ");
     gdt::init();
-    display::print("done.");
+    display::println("done.");
+
+    display::print("Initializing IDT... ");
+    idt::init();
+    display::println("done.");
 }
