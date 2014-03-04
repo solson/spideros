@@ -29,11 +29,11 @@ extern "C" void kmain(const multiboot::Info* mbinfo, u32 magic) {
     if(mbinfo->hasFlag(multiboot::COMMAND_LINE))
         display::println("Command line:\t", (const char*) mbinfo->commandLine);
 
-    display::println();
-    display::println("Hex: 0x", display::hex(120), '\n',
-                     "Oct: 0",  display::oct(120), '\n',
-                     "Bin: 0b", display::bin(120), '\n',
-                     "Dec: ", 120);
+    display::println("Integer printing tests:");
+    display::println("Hex: 0x", display::hex(42));
+    display::println("Oct: 0",  display::oct(42));
+    display::println("Bin: 0b", display::bin(42));
+    display::println("Dec: ", 42);
     display::println();
 
     display::print("Initializing GDT... ");
