@@ -3,7 +3,7 @@
 #include "multiboot.h"
 #include "gdt.h"
 
-extern "C" void kmain(multiboot::Info* mbinfo, u32 magic) {
+extern "C" void kmain(const multiboot::Info* mbinfo, u32 magic) {
     display::init();
 
     if(magic != multiboot::BOOTLOADER_MAGIC) {

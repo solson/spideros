@@ -37,8 +37,8 @@ enum Flag {
 // TODO Add accessor functions returning the correct type for each
 // members.
 struct Info {
-    bool hasFlag(Flag f) {
-        return flags & int(f);
+    bool hasFlag(Flag f) const {
+        return flags & f;
     }
 
     // Determines which fields below are present.

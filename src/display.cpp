@@ -106,8 +106,10 @@ void print(char c) {
 }
 
 void print(const char* str) {
-    for(char c : str)
-        print(c);
+    while(*str != '\0') {
+        print(*str);
+        str++;
+    }
 }
 
 void printInt(u32 n, int radix) {
