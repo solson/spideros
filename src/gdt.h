@@ -8,20 +8,20 @@
 namespace gdt {
 
 // Pointer to the Global Descriptor Table for the lgdt operation
-struct GdtPtr {
+struct [[gnu::packed]] GdtPtr {
     u16 size;
     u32 offset;
-} __attribute__((packed));
+};
 
 // Structure for entries in the Global Descriptor Table
-struct Entry {
+struct [[gnu::packed]] Entry {
     u16 limitLow;       // limit 0..15
     u16 baseLow;        // base 0..15
     u8 baseMid;         // base 16..23
     u8 accessByte;
     u8 flags_limitHigh; // limit 16..19
     u8 baseHigh;        // base 24..31
-} __attribute__((packed));
+};
 
 // Number of entries in the GDT.
 const unsigned GDT_ENTRIES = 256;
