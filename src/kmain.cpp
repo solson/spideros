@@ -17,9 +17,9 @@ extern "C" void kmain(const multiboot::Info* mbinfo, u32 magic) {
 
     // Print to screen to see everything is working.
     display::clearScreen();
-    display::println("Welcome to SpiderOS!");
-    display::println("====================");
-    display::println("This is", " a", ' ', 't', "est", '!');
+    display::println("Welcome to spideros");
+    display::println("===================");
+    display::println("This is", " a", ' ', 't', "est", '.');
     const int a = 12, b = 3;
     display::println("Hey look, numbers: ", a, " * ", b, " = ", a * b);
     display::println();
