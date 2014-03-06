@@ -3,6 +3,7 @@
 #include "multiboot.h"
 #include "gdt.h"
 #include "idt.h"
+#include "interrupts.h"
 
 extern "C" void kmain(const multiboot::Info* mbinfo, u32 magic) {
     display::init();
@@ -44,4 +45,10 @@ extern "C" void kmain(const multiboot::Info* mbinfo, u32 magic) {
     display::print("Initializing IDT... ");
     idt::init();
     display::println("done.");
+
+    idt::setGate(0, (void*) interrupts::isr0, 0x8, 0, 0, idt::INTR32);
+
+    // Do division by zero to trigger interrupt 0
+    int y = 0;
+    y = 1 / y;
 }
