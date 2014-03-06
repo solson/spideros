@@ -43,7 +43,6 @@ global isrSyscall
 
 isrSyscall:
     cli
-    push  0
     push  0x80
     jmp   isrCommon
     iret
