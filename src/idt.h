@@ -35,7 +35,6 @@ enum {
 
 void init();
 void setGate(u32 n, void* offset, u16 selector, u8 priv, u8 sys, u8 gateType);
-extern "C" void loadIDT(IdtPtr* ip);
 
 } // namespace idt
 

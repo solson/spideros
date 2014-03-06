@@ -12,7 +12,8 @@ void init() {
     ip.size = sizeof(Gate) * IDT_ENTRIES - 1;
     ip.offset = reinterpret_cast<u32>(&idt);
 
-    loadIDT(&ip);
+    // Make the CPU load the new IDT.
+    asm volatile("lidt (%0)" : : "a"(&ip));
 }
 
 // TODO: Change type of offset.
