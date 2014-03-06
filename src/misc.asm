@@ -1,7 +1,6 @@
 bits 32
 
 global loadGDT
-global loadIDT
 
 section .text
 
