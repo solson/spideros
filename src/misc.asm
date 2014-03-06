@@ -62,8 +62,6 @@ isrSyscall:
     mov   gs, ax
     mov   eax, esp
     push  eax
-    ;mov   eax, %1Handler
-    ;call  eax
     call %1Handler
     pop   eax
     pop   gs
