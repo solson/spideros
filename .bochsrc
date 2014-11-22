@@ -1,4 +1,0 @@
-boot: cdrom
-ata0-master: type=cdrom, path=spideros.iso, status=inserted
-
-port_e9_hack: enabled=1

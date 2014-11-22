@@ -1,17 +1,5 @@
-# Ignore the result of any builds.
 *.o
-*.sho
 *.exe
-*.lib
-*.shlib
 *.iso
-
-#ignore editor temporary and backup files
-.*.sw?
-*~
-\#*\#
-.\#*
-
-# Ignore the GRUB stage2
-stage2_eltorito
-
+.sconsign.dblite
+.ycm_extra_conf.pyc

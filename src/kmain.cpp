@@ -11,8 +11,7 @@ extern "C" void kmain(const multiboot::Info* mbinfo, u32 magic) {
     if(magic != multiboot::BOOTLOADER_MAGIC) {
         // Something went not according to specs. Do not rely on the
         // multiboot data structure.
-        display::println("error: The bootloader's magic number didn't "
-            "match. Something must have gone wrong.");
+        display::println("error: The bootloader's magic number didn't match. Something must have gone wrong.");
         return;
     }
 
