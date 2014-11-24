@@ -69,8 +69,9 @@ void printAt(char c, int x, int y) {
 void print(char c) {
   switch(c) {
     case '\b':
-      if (cursorX != 0)
+      if (cursorX != 0) {
         cursorX--;
+      }
       break;
 
     case '\t':
