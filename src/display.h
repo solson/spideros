@@ -8,12 +8,12 @@ namespace display {
 const int consoleWidth = 80;
 const int consoleHeight = 25;
 
-// Display-related I/O ports. They are taken from the BIOS Data Area
-// during init();
-extern int indexPort;
-extern int dataPort;
+// Display-related I/O ports. They are taken from the BIOS Data Area during
+// init();
+extern u16 indexPort;
+extern u16 dataPort;
 
-// Indexes for the index port
+// Indexes for the index port.
 const int cursorLowPort  = 0x0E;
 const int cursorHighPort = 0x0F;
 
@@ -21,33 +21,33 @@ extern int cursorX, cursorY;
 extern u8 color;
 
 enum class Color : u8 {
-    // Bright bit unset
-    BLACK = 0,
-    BLUE,
-    GREEN,
-    CYAN,
-    RED,
-    MAGENTA,
-    BROWN,
-    LIGHT_GREY,
+  // Bright bit unset.
+  BLACK = 0,
+  BLUE,
+  GREEN,
+  CYAN,
+  RED,
+  MAGENTA,
+  BROWN,
+  LIGHT_GREY,
 
-    // Bright bit set
-    DARK_GREY,
-    LIGHT_BLUE,
-    LIGHT_GREEN,
-    LIGHT_CYAN,
-    LIGHT_RED,
-    LIGHT_MAGENTA,
-    YELLOW,
-    WHITE
+  // Bright bit set.
+  DARK_GREY,
+  LIGHT_BLUE,
+  LIGHT_GREEN,
+  LIGHT_CYAN,
+  LIGHT_RED,
+  LIGHT_MAGENTA,
+  YELLOW,
+  WHITE
 };
 
 // A cell in text video memory. Do not reorder the fields.
 struct Cell {
-    u8 character;
-    u8 color;
+  u8 character;
+  u8 color;
 
-    Cell(u8 color, u8 character) : character(character), color(color) {}
+  Cell(u8 color, u8 character) : character(character), color(color) {}
 };
 
 void init();
@@ -57,7 +57,7 @@ void updateCursor();
 Cell& cellAt(int x, int y);
 void setColor(Color fg, Color bg);
 
-// Printing functions
+// Printing functions.
 void printInt(u32 n, int radix);
 void printAt(char c, int x, int y);
 void print(char c);
@@ -65,52 +65,52 @@ void print(const char* str);
 void print(i32 x);
 void print(u32 x);
 
-// Special number base formatting "tag" struct
+// Special number base formatting "tag" struct.
 template<typename Int>
 struct IntBase {
-    Int val;
-    int base;
-    constexpr IntBase(Int val, int base) : val(val), base(base) {}
+  Int val;
+  int base;
+  constexpr IntBase(Int val, int base) : val(val), base(base) {}
 };
 
 template<typename Int>
-inline constexpr IntBase<Int> hex(Int x) {
-    return IntBase<Int>(x, 16);
+constexpr IntBase<Int> hex(Int x) {
+  return IntBase<Int>(x, 16);
 }
 
 template<typename Int>
-inline constexpr IntBase<Int> oct(Int x) {
-    return IntBase<Int>(x, 8);
+constexpr IntBase<Int> oct(Int x) {
+  return IntBase<Int>(x, 8);
 }
 
 template<typename Int>
-inline constexpr IntBase<Int> bin(Int x) {
-    return IntBase<Int>(x, 2);
+constexpr IntBase<Int> bin(Int x) {
+  return IntBase<Int>(x, 2);
 }
 
 template<typename Int>
-inline void print(IntBase<Int> x) {
-    printInt(x.val, x.base);
+void print(IntBase<Int> x) {
+  printInt(x.val, x.base);
 }
 
-// No-op base case for the variadic template print function
+// No-op base case for the variadic template print function.
 inline void print() {}
 
 // Variadic print function which calls print(arg) for each argument it gets.
 template<typename First, typename Second, typename... Rest>
-inline void print(First first, Second second, Rest... rest) {
-    print(first);
-    print(second);
-    print(rest...);
+void print(First first, Second second, Rest... rest) {
+  print(first);
+  print(second);
+  print(rest...);
 }
 
 // Variadic print function that adds a newline at the end.
 template<typename... Args>
-inline void println(Args... args) {
-    print(args..., '\n');
+void println(Args... args) {
+  print(args..., '\n');
 }
 
 } // namepspace display
 
-#endif /* DISPLAY_H */
+#endif // DISPLAY_H
 
