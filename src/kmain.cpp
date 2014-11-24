@@ -1,9 +1,10 @@
-#include "types.h"
 #include "display.h"
-#include "multiboot.h"
 #include "gdt.h"
 #include "idt.h"
 #include "interrupts.h"
+#include "multiboot.h"
+#include "ports.h"
+#include "types.h"
 
 extern "C" void kmain(const multiboot::Info* mbinfo, u32 magic) {
   display::init();
@@ -47,9 +48,15 @@ extern "C" void kmain(const multiboot::Info* mbinfo, u32 magic) {
   idt::init();
   display::println("done.");
 
-  idt::setGate(0, interrupts::isr0, 0x8, 0, 0, idt::INTR32);
+  display::print("Initializing interrupt handlers... ");
+  interrupts::init();
+  display::println("done.");
 
-  // Do division by zero to trigger interrupt 0
-  int y = 0;
-  y = 1 / y;
+  interrupts::enable();
+  while (true) {
+    // Flush keyboard buffer.
+    while(ports::inb(0x64) & 1) {
+      ports::inb(0x60);
+    }
+  }
 }
