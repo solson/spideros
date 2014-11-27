@@ -6,10 +6,12 @@
 #include "ports.h"
 #include "types.h"
 
-static void runInit(const char* stage, void (*initFn)()) {
+namespace {
+void runInit(const char* stage, void (*initFn)()) {
   display::print("Initializing ", stage, "... ");
   initFn();
   display::println("done.");
+}
 }
 
 extern "C" void kmain(const multiboot::Info* mbinfo, u32 magic) {
@@ -50,11 +52,15 @@ extern "C" void kmain(const multiboot::Info* mbinfo, u32 magic) {
   runInit("IDT", idt::init);
   runInit("interrupt handlers", interrupts::init);
 
-  interrupts::enable();
-  while (true) {
+  interrupts::setIrqHandler(1, [](interrupts::Registers*){
     // Flush keyboard buffer.
     while(ports::inb(0x64) & 1) {
       ports::inb(0x60);
     }
+  });
+
+  interrupts::enable();
+  while (true) {
+    // Just wait.
   }
 }

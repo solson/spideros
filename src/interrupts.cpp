@@ -1,7 +1,10 @@
+#include "assert.h"
 #include "interrupts.h"
 #include "display.h"
 #include "idt.h"
 #include "ports.h"
+
+// TODO: Deal with the magic numbers in this file.
 
 namespace interrupts {
 
@@ -74,8 +77,8 @@ const u16 PIC1_DATA_PORT    = 0x21;
 const u16 PIC2_COMMAND_PORT = 0xA0;
 const u16 PIC2_DATA_PORT    = 0xA1;
 
-// Command to send to the PICs when we are finished handling an interrupt to
-// resume regularly scheduled programming.
+// End-of-interupt command to send to the PICs when we are finished handling an
+// interrupt to resume regularly scheduled programming.
 const u8 PIC_EOI = 0x20;
 
 // Normally, IRQs 0 to 7 are mapped to entries 8 to 15. This is a problem in
@@ -108,6 +111,13 @@ void remapPic() {
   ports::outb(PIC2_DATA_PORT, 0x00);
 }
 
+IrqHandlerFn irqHandlerFns[16]; // Implicitly zero-initialized.
+
+void setIrqHandler(u32 irqNum, IrqHandlerFn handlerFn) {
+  assert(irqNum < 16);
+  irqHandlerFns[irqNum] = handlerFn;
+}
+
 extern "C" void isrHandler(Registers* regs) {
   display::println("Got isr interrupt: ", regs->interruptNum);
 
@@ -116,10 +126,17 @@ extern "C" void isrHandler(Registers* regs) {
 }
 
 extern "C" void irqHandler(Registers* regs) {
-  display::println("Got irq interrupt: ", regs->interruptNum);
+  const u32 irqNum = regs->interruptNum - 32;
+  display::println("Got irq ", irqNum);
+  assert(irqNum < 16);
 
-  // We need to send an EOI to the interrupt controller when we are done. Only
-  // send EOI to slave controller if it's involved (irqs 8 and up).
+  if (irqHandlerFns[irqNum]) {
+    irqHandlerFns[irqNum](regs);
+  }
+
+  // We need to send an EOI (end-of-interrupt command) to the interrupt
+  // controller when we are done. Only send EOI to slave controller if it's
+  // involved (irqs 8 and up).
   if(regs->interruptNum >= 8) {
     ports::outb(PIC2_COMMAND_PORT, PIC_EOI);
   }

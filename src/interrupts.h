@@ -5,11 +5,6 @@
 
 namespace interrupts {
 
-void init();
-void initIsrs();
-void initIrqs();
-void remapPic();
-
 // Enable interrupts on the CPU.
 inline void enable() {
   asm volatile("sti");
@@ -26,6 +21,14 @@ struct Registers {
   u32 interruptNum;
   u32 eip, cs, eflags, useresp, ss;           // Pushed by CPU on interrupt.
 };
+
+using IrqHandlerFn = void (*)(Registers*);
+void setIrqHandler(u32 irqNum, IrqHandlerFn handlerFn);
+
+void init();
+void initIsrs();
+void initIrqs();
+void remapPic();
 
 extern "C" {
 
