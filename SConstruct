@@ -25,6 +25,11 @@ env = Environment(
     },
 )
 
+# Allow clang static analyzer to override the compiler.
+env['CC'] = os.getenv('CC') or env['CC']
+env['CXX'] = os.getenv('CXX') or env['CXX']
+env['ENV'].update(x for x in os.environ.items() if x[0].startswith('CCC_'))
+
 spideros_exe = env.Program(
     target = 'isofs/system/spideros.exe',
     source = [
