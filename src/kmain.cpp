@@ -2,6 +2,7 @@
 #include "gdt.h"
 #include "idt.h"
 #include "interrupts.h"
+#include "keyboard.h"
 #include "multiboot.h"
 #include "ports.h"
 #include "types.h"
@@ -51,13 +52,7 @@ extern "C" void kmain(const multiboot::Info* mbinfo, u32 magic) {
   runInit("GDT", gdt::init);
   runInit("IDT", idt::init);
   runInit("interrupt handlers", interrupts::init);
-
-  interrupts::setIrqHandler(1, [](interrupts::Registers*){
-    // Flush keyboard buffer.
-    while(ports::inb(0x64) & 1) {
-      ports::inb(0x60);
-    }
-  });
+  runInit("keyboard", keyboard::init);
 
   interrupts::enable();
   while (true) {
