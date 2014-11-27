@@ -6,6 +6,12 @@
 #include "ports.h"
 #include "types.h"
 
+static void runInit(const char* stage, void (*initFn)()) {
+  display::print("Initializing ", stage, "... ");
+  initFn();
+  display::println("done.");
+}
+
 extern "C" void kmain(const multiboot::Info* mbinfo, u32 magic) {
   display::init();
 
@@ -40,17 +46,9 @@ extern "C" void kmain(const multiboot::Info* mbinfo, u32 magic) {
   display::println("Dec: ", 42);
   display::println();
 
-  display::print("Initializing GDT... ");
-  gdt::init();
-  display::println("done.");
-
-  display::print("Initializing IDT... ");
-  idt::init();
-  display::println("done.");
-
-  display::print("Initializing interrupt handlers... ");
-  interrupts::init();
-  display::println("done.");
+  runInit("GDT", gdt::init);
+  runInit("IDT", idt::init);
+  runInit("interrupt handlers", interrupts::init);
 
   interrupts::enable();
   while (true) {
