@@ -44,7 +44,6 @@ spideros_exe = env.Program(
         'src/kmain.cpp',
         'src/memory.cpp',
         'src/misc.asm',
-        'src/ports.cpp',
         'src/string.cpp',
     ],
     LINK = 'ld',
