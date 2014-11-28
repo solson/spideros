@@ -13,60 +13,74 @@ void init() {
   initIrqs();
 }
 
+template<int n>
+[[gnu::naked]] void isr() {
+  asm volatile("cli");
+  asm volatile("push %0" : : "i"(n));
+  asm volatile("jmp isrCommon");
+}
+
+template<int n>
+[[gnu::naked]] void irq() {
+  asm volatile("cli");
+  asm volatile("push %0" : : "i"(n));
+  asm volatile("jmp irqCommon");
+}
+
 void initIsrs() {
-  idt::setGate(0,  isr0,  0x8, 0, 0, idt::INTR32);
-  idt::setGate(1,  isr1,  0x8, 0, 0, idt::INTR32);
-  idt::setGate(2,  isr2,  0x8, 0, 0, idt::INTR32);
-  idt::setGate(3,  isr3,  0x8, 0, 0, idt::INTR32);
-  idt::setGate(4,  isr4,  0x8, 0, 0, idt::INTR32);
-  idt::setGate(5,  isr5,  0x8, 0, 0, idt::INTR32);
-  idt::setGate(6,  isr6,  0x8, 0, 0, idt::INTR32);
-  idt::setGate(7,  isr7,  0x8, 0, 0, idt::INTR32);
-  idt::setGate(8,  isr8,  0x8, 0, 0, idt::INTR32);
-  idt::setGate(9,  isr9,  0x8, 0, 0, idt::INTR32);
-  idt::setGate(10, isr10, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(11, isr11, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(12, isr12, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(13, isr13, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(14, isr14, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(15, isr15, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(16, isr16, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(17, isr17, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(18, isr18, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(19, isr19, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(20, isr20, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(21, isr21, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(22, isr22, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(23, isr23, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(24, isr24, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(25, isr25, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(26, isr26, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(27, isr27, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(28, isr28, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(29, isr29, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(30, isr30, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(31, isr31, 0x8, 0, 0, idt::INTR32);
+  idt::setGate(0,  isr<0>,  0x8, 0, 0, idt::INTR32);
+  idt::setGate(1,  isr<1>,  0x8, 0, 0, idt::INTR32);
+  idt::setGate(2,  isr<2>,  0x8, 0, 0, idt::INTR32);
+  idt::setGate(3,  isr<3>,  0x8, 0, 0, idt::INTR32);
+  idt::setGate(4,  isr<4>,  0x8, 0, 0, idt::INTR32);
+  idt::setGate(5,  isr<5>,  0x8, 0, 0, idt::INTR32);
+  idt::setGate(6,  isr<6>,  0x8, 0, 0, idt::INTR32);
+  idt::setGate(7,  isr<7>,  0x8, 0, 0, idt::INTR32);
+  idt::setGate(8,  isr<8>,  0x8, 0, 0, idt::INTR32);
+  idt::setGate(9,  isr<9>,  0x8, 0, 0, idt::INTR32);
+  idt::setGate(10, isr<10>, 0x8, 0, 0, idt::INTR32);
+  idt::setGate(11, isr<11>, 0x8, 0, 0, idt::INTR32);
+  idt::setGate(12, isr<12>, 0x8, 0, 0, idt::INTR32);
+  idt::setGate(13, isr<13>, 0x8, 0, 0, idt::INTR32);
+  idt::setGate(14, isr<14>, 0x8, 0, 0, idt::INTR32);
+  idt::setGate(15, isr<15>, 0x8, 0, 0, idt::INTR32);
+  idt::setGate(16, isr<16>, 0x8, 0, 0, idt::INTR32);
+  idt::setGate(17, isr<17>, 0x8, 0, 0, idt::INTR32);
+  idt::setGate(18, isr<18>, 0x8, 0, 0, idt::INTR32);
+  idt::setGate(19, isr<19>, 0x8, 0, 0, idt::INTR32);
+  idt::setGate(20, isr<20>, 0x8, 0, 0, idt::INTR32);
+  idt::setGate(21, isr<21>, 0x8, 0, 0, idt::INTR32);
+  idt::setGate(22, isr<22>, 0x8, 0, 0, idt::INTR32);
+  idt::setGate(23, isr<23>, 0x8, 0, 0, idt::INTR32);
+  idt::setGate(24, isr<24>, 0x8, 0, 0, idt::INTR32);
+  idt::setGate(25, isr<25>, 0x8, 0, 0, idt::INTR32);
+  idt::setGate(26, isr<26>, 0x8, 0, 0, idt::INTR32);
+  idt::setGate(27, isr<27>, 0x8, 0, 0, idt::INTR32);
+  idt::setGate(28, isr<28>, 0x8, 0, 0, idt::INTR32);
+  idt::setGate(29, isr<29>, 0x8, 0, 0, idt::INTR32);
+  idt::setGate(30, isr<30>, 0x8, 0, 0, idt::INTR32);
+  idt::setGate(31, isr<31>, 0x8, 0, 0, idt::INTR32);
 }
 
 void initIrqs() {
   remapPic();
 
-  idt::setGate(32, irq0,  0x8, 0, 0, idt::INTR32);
-  idt::setGate(33, irq1,  0x8, 0, 0, idt::INTR32);
-  idt::setGate(34, irq2,  0x8, 0, 0, idt::INTR32);
-  idt::setGate(35, irq3,  0x8, 0, 0, idt::INTR32);
-  idt::setGate(36, irq4,  0x8, 0, 0, idt::INTR32);
-  idt::setGate(37, irq5,  0x8, 0, 0, idt::INTR32);
-  idt::setGate(38, irq6,  0x8, 0, 0, idt::INTR32);
-  idt::setGate(39, irq7,  0x8, 0, 0, idt::INTR32);
-  idt::setGate(40, irq8,  0x8, 0, 0, idt::INTR32);
-  idt::setGate(41, irq9,  0x8, 0, 0, idt::INTR32);
-  idt::setGate(42, irq10, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(43, irq11, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(44, irq12, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(45, irq13, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(46, irq14, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(47, irq15, 0x8, 0, 0, idt::INTR32);
+  idt::setGate(32, irq<32>, 0x8, 0, 0, idt::INTR32);
+  idt::setGate(33, irq<33>, 0x8, 0, 0, idt::INTR32);
+  idt::setGate(34, irq<34>, 0x8, 0, 0, idt::INTR32);
+  idt::setGate(35, irq<35>, 0x8, 0, 0, idt::INTR32);
+  idt::setGate(36, irq<36>, 0x8, 0, 0, idt::INTR32);
+  idt::setGate(37, irq<37>, 0x8, 0, 0, idt::INTR32);
+  idt::setGate(38, irq<38>, 0x8, 0, 0, idt::INTR32);
+  idt::setGate(39, irq<39>, 0x8, 0, 0, idt::INTR32);
+  idt::setGate(40, irq<40>, 0x8, 0, 0, idt::INTR32);
+  idt::setGate(41, irq<41>, 0x8, 0, 0, idt::INTR32);
+  idt::setGate(42, irq<42>, 0x8, 0, 0, idt::INTR32);
+  idt::setGate(43, irq<43>, 0x8, 0, 0, idt::INTR32);
+  idt::setGate(44, irq<44>, 0x8, 0, 0, idt::INTR32);
+  idt::setGate(45, irq<45>, 0x8, 0, 0, idt::INTR32);
+  idt::setGate(46, irq<46>, 0x8, 0, 0, idt::INTR32);
+  idt::setGate(47, irq<47>, 0x8, 0, 0, idt::INTR32);
 }
 
 // Master PIC command and data port numbers.
