@@ -10,6 +10,6 @@ void init();
 void interruptHandler(interrupts::Registers* regs);
 void flushBuffer();
 
-}
+} // namespace keyboard
 
 #endif /* KEYBOARD_H_ */

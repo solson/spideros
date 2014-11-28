@@ -54,6 +54,15 @@ extern "C" void kmain(const multiboot::Info* mbinfo, u32 magic) {
   runInit("interrupt handlers", interrupts::init);
   runInit("keyboard", keyboard::init);
 
+  // Handle timer interrupts.
+  interrupts::setIrqHandler(0, [](interrupts::Registers*) {
+    static int ticks = 0;
+    ticks++;
+    if (ticks % 100 == 0) {
+      display::println("Ticks: ", ticks);
+    }
+  });
+
   interrupts::enable();
   while (true) {
     // Just wait.

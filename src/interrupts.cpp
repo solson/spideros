@@ -127,11 +127,12 @@ extern "C" void isrHandler(Registers* regs) {
 
 extern "C" void irqHandler(Registers* regs) {
   const u32 irqNum = regs->interruptNum - 32;
-  display::println("Got irq ", irqNum);
   assert(irqNum < 16);
 
   if (irqHandlerFns[irqNum]) {
     irqHandlerFns[irqNum](regs);
+  } else {
+    display::println("Got unhandled irq ", irqNum);
   }
 
   // We need to send an EOI (end-of-interrupt command) to the interrupt
