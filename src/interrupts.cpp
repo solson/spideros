@@ -8,11 +8,6 @@
 
 namespace interrupts {
 
-void init() {
-  initIsrs();
-  initIrqs();
-}
-
 template<int n>
 [[gnu::naked]] void interrupt() {
   asm volatile("cli");
@@ -20,60 +15,18 @@ template<int n>
   asm volatile("jmp interruptCommon");
 }
 
-void initIsrs() {
-  idt::setGate(0,  interrupt<0>,  0x8, 0, 0, idt::INTR32);
-  idt::setGate(1,  interrupt<1>,  0x8, 0, 0, idt::INTR32);
-  idt::setGate(2,  interrupt<2>,  0x8, 0, 0, idt::INTR32);
-  idt::setGate(3,  interrupt<3>,  0x8, 0, 0, idt::INTR32);
-  idt::setGate(4,  interrupt<4>,  0x8, 0, 0, idt::INTR32);
-  idt::setGate(5,  interrupt<5>,  0x8, 0, 0, idt::INTR32);
-  idt::setGate(6,  interrupt<6>,  0x8, 0, 0, idt::INTR32);
-  idt::setGate(7,  interrupt<7>,  0x8, 0, 0, idt::INTR32);
-  idt::setGate(8,  interrupt<8>,  0x8, 0, 0, idt::INTR32);
-  idt::setGate(9,  interrupt<9>,  0x8, 0, 0, idt::INTR32);
-  idt::setGate(10, interrupt<10>, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(11, interrupt<11>, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(12, interrupt<12>, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(13, interrupt<13>, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(14, interrupt<14>, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(15, interrupt<15>, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(16, interrupt<16>, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(17, interrupt<17>, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(18, interrupt<18>, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(19, interrupt<19>, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(20, interrupt<20>, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(21, interrupt<21>, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(22, interrupt<22>, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(23, interrupt<23>, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(24, interrupt<24>, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(25, interrupt<25>, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(26, interrupt<26>, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(27, interrupt<27>, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(28, interrupt<28>, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(29, interrupt<29>, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(30, interrupt<30>, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(31, interrupt<31>, 0x8, 0, 0, idt::INTR32);
+// Set the IDT gates for interrupts from 0 up to N - 1
+template<unsigned N>
+[[gnu::always_inline]] void setIdtGates() {
+  setIdtGates<N - 1>();
+  idt::setGate(N - 1,  interrupt<N - 1>,  0x8, 0, 0, idt::INTR32);
 }
 
-void initIrqs() {
-  remapPic();
+template<> void setIdtGates<0>() {}
 
-  idt::setGate(32, interrupt<32>, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(33, interrupt<33>, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(34, interrupt<34>, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(35, interrupt<35>, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(36, interrupt<36>, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(37, interrupt<37>, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(38, interrupt<38>, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(39, interrupt<39>, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(40, interrupt<40>, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(41, interrupt<41>, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(42, interrupt<42>, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(43, interrupt<43>, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(44, interrupt<44>, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(45, interrupt<45>, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(46, interrupt<46>, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(47, interrupt<47>, 0x8, 0, 0, idt::INTR32);
+void init() {
+  remapPic();
+  setIdtGates<48>();
 }
 
 // Master PIC command and data port numbers.
