@@ -1,10 +1,9 @@
 bits 32
 
-global loadGDT
-
 section .text
 
 ;;; void loadGDT(gdt::GdtPtr*)
+global loadGDT
 loadGDT:
     push  eax
     mov   eax, [esp+0x8]
@@ -23,18 +22,10 @@ loadGDT:
     mov   ss, ax
     ret
 
-;;;
-;;; Exceptions, ISRs, IRQs
-;;;
+extern interruptHandler
 
-extern isrHandler
-extern irqHandler
-
-global isrCommon
-global irqCommon
-
-%macro HANDLER_COMMON 1
-%1Common:
+global interruptCommon
+interruptCommon:
     pusha
     push  ds
     push  es
@@ -47,7 +38,7 @@ global irqCommon
     mov   gs, ax
     mov   eax, esp
     push  eax
-    call %1Handler
+    call  interruptHandler
     pop   eax
     pop   gs
     pop   fs
@@ -56,7 +47,3 @@ global irqCommon
     popa
     add   esp, 4
     iret
-%endmacro
-
-HANDLER_COMMON isr
-HANDLER_COMMON irq

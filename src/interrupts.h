@@ -30,12 +30,7 @@ void initIsrs();
 void initIrqs();
 void remapPic();
 
-extern "C" {
-
-void isrHandler(Registers* regs);
-void irqHandler(Registers* regs);
-
-}
+extern "C" void interruptHandler(Registers* regs);
 
 } // namespace interrupts
 

@@ -14,73 +14,66 @@ void init() {
 }
 
 template<int n>
-[[gnu::naked]] void isr() {
+[[gnu::naked]] void interrupt() {
   asm volatile("cli");
   asm volatile("push %0" : : "i"(n));
-  asm volatile("jmp isrCommon");
-}
-
-template<int n>
-[[gnu::naked]] void irq() {
-  asm volatile("cli");
-  asm volatile("push %0" : : "i"(n));
-  asm volatile("jmp irqCommon");
+  asm volatile("jmp interruptCommon");
 }
 
 void initIsrs() {
-  idt::setGate(0,  isr<0>,  0x8, 0, 0, idt::INTR32);
-  idt::setGate(1,  isr<1>,  0x8, 0, 0, idt::INTR32);
-  idt::setGate(2,  isr<2>,  0x8, 0, 0, idt::INTR32);
-  idt::setGate(3,  isr<3>,  0x8, 0, 0, idt::INTR32);
-  idt::setGate(4,  isr<4>,  0x8, 0, 0, idt::INTR32);
-  idt::setGate(5,  isr<5>,  0x8, 0, 0, idt::INTR32);
-  idt::setGate(6,  isr<6>,  0x8, 0, 0, idt::INTR32);
-  idt::setGate(7,  isr<7>,  0x8, 0, 0, idt::INTR32);
-  idt::setGate(8,  isr<8>,  0x8, 0, 0, idt::INTR32);
-  idt::setGate(9,  isr<9>,  0x8, 0, 0, idt::INTR32);
-  idt::setGate(10, isr<10>, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(11, isr<11>, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(12, isr<12>, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(13, isr<13>, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(14, isr<14>, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(15, isr<15>, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(16, isr<16>, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(17, isr<17>, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(18, isr<18>, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(19, isr<19>, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(20, isr<20>, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(21, isr<21>, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(22, isr<22>, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(23, isr<23>, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(24, isr<24>, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(25, isr<25>, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(26, isr<26>, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(27, isr<27>, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(28, isr<28>, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(29, isr<29>, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(30, isr<30>, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(31, isr<31>, 0x8, 0, 0, idt::INTR32);
+  idt::setGate(0,  interrupt<0>,  0x8, 0, 0, idt::INTR32);
+  idt::setGate(1,  interrupt<1>,  0x8, 0, 0, idt::INTR32);
+  idt::setGate(2,  interrupt<2>,  0x8, 0, 0, idt::INTR32);
+  idt::setGate(3,  interrupt<3>,  0x8, 0, 0, idt::INTR32);
+  idt::setGate(4,  interrupt<4>,  0x8, 0, 0, idt::INTR32);
+  idt::setGate(5,  interrupt<5>,  0x8, 0, 0, idt::INTR32);
+  idt::setGate(6,  interrupt<6>,  0x8, 0, 0, idt::INTR32);
+  idt::setGate(7,  interrupt<7>,  0x8, 0, 0, idt::INTR32);
+  idt::setGate(8,  interrupt<8>,  0x8, 0, 0, idt::INTR32);
+  idt::setGate(9,  interrupt<9>,  0x8, 0, 0, idt::INTR32);
+  idt::setGate(10, interrupt<10>, 0x8, 0, 0, idt::INTR32);
+  idt::setGate(11, interrupt<11>, 0x8, 0, 0, idt::INTR32);
+  idt::setGate(12, interrupt<12>, 0x8, 0, 0, idt::INTR32);
+  idt::setGate(13, interrupt<13>, 0x8, 0, 0, idt::INTR32);
+  idt::setGate(14, interrupt<14>, 0x8, 0, 0, idt::INTR32);
+  idt::setGate(15, interrupt<15>, 0x8, 0, 0, idt::INTR32);
+  idt::setGate(16, interrupt<16>, 0x8, 0, 0, idt::INTR32);
+  idt::setGate(17, interrupt<17>, 0x8, 0, 0, idt::INTR32);
+  idt::setGate(18, interrupt<18>, 0x8, 0, 0, idt::INTR32);
+  idt::setGate(19, interrupt<19>, 0x8, 0, 0, idt::INTR32);
+  idt::setGate(20, interrupt<20>, 0x8, 0, 0, idt::INTR32);
+  idt::setGate(21, interrupt<21>, 0x8, 0, 0, idt::INTR32);
+  idt::setGate(22, interrupt<22>, 0x8, 0, 0, idt::INTR32);
+  idt::setGate(23, interrupt<23>, 0x8, 0, 0, idt::INTR32);
+  idt::setGate(24, interrupt<24>, 0x8, 0, 0, idt::INTR32);
+  idt::setGate(25, interrupt<25>, 0x8, 0, 0, idt::INTR32);
+  idt::setGate(26, interrupt<26>, 0x8, 0, 0, idt::INTR32);
+  idt::setGate(27, interrupt<27>, 0x8, 0, 0, idt::INTR32);
+  idt::setGate(28, interrupt<28>, 0x8, 0, 0, idt::INTR32);
+  idt::setGate(29, interrupt<29>, 0x8, 0, 0, idt::INTR32);
+  idt::setGate(30, interrupt<30>, 0x8, 0, 0, idt::INTR32);
+  idt::setGate(31, interrupt<31>, 0x8, 0, 0, idt::INTR32);
 }
 
 void initIrqs() {
   remapPic();
 
-  idt::setGate(32, irq<32>, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(33, irq<33>, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(34, irq<34>, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(35, irq<35>, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(36, irq<36>, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(37, irq<37>, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(38, irq<38>, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(39, irq<39>, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(40, irq<40>, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(41, irq<41>, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(42, irq<42>, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(43, irq<43>, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(44, irq<44>, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(45, irq<45>, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(46, irq<46>, 0x8, 0, 0, idt::INTR32);
-  idt::setGate(47, irq<47>, 0x8, 0, 0, idt::INTR32);
+  idt::setGate(32, interrupt<32>, 0x8, 0, 0, idt::INTR32);
+  idt::setGate(33, interrupt<33>, 0x8, 0, 0, idt::INTR32);
+  idt::setGate(34, interrupt<34>, 0x8, 0, 0, idt::INTR32);
+  idt::setGate(35, interrupt<35>, 0x8, 0, 0, idt::INTR32);
+  idt::setGate(36, interrupt<36>, 0x8, 0, 0, idt::INTR32);
+  idt::setGate(37, interrupt<37>, 0x8, 0, 0, idt::INTR32);
+  idt::setGate(38, interrupt<38>, 0x8, 0, 0, idt::INTR32);
+  idt::setGate(39, interrupt<39>, 0x8, 0, 0, idt::INTR32);
+  idt::setGate(40, interrupt<40>, 0x8, 0, 0, idt::INTR32);
+  idt::setGate(41, interrupt<41>, 0x8, 0, 0, idt::INTR32);
+  idt::setGate(42, interrupt<42>, 0x8, 0, 0, idt::INTR32);
+  idt::setGate(43, interrupt<43>, 0x8, 0, 0, idt::INTR32);
+  idt::setGate(44, interrupt<44>, 0x8, 0, 0, idt::INTR32);
+  idt::setGate(45, interrupt<45>, 0x8, 0, 0, idt::INTR32);
+  idt::setGate(46, interrupt<46>, 0x8, 0, 0, idt::INTR32);
+  idt::setGate(47, interrupt<47>, 0x8, 0, 0, idt::INTR32);
 }
 
 // Master PIC command and data port numbers.
@@ -132,30 +125,29 @@ void setIrqHandler(u32 irqNum, IrqHandlerFn handlerFn) {
   irqHandlerFns[irqNum] = handlerFn;
 }
 
-extern "C" void isrHandler(Registers* regs) {
-  display::println("Got isr interrupt: ", regs->interruptNum);
+extern "C" void interruptHandler(Registers* regs) {
+  if (regs->interruptNum >= 32 && regs->interruptNum < 48) {
+    const u32 irqNum = regs->interruptNum - 32;
 
-  // Disable interrupts and halt.
-  asm volatile("cli; hlt");
-}
+    if (irqHandlerFns[irqNum]) {
+      irqHandlerFns[irqNum](regs);
+    } else {
+      display::println("Got unhandled irq ", irqNum);
+    }
 
-extern "C" void irqHandler(Registers* regs) {
-  const u32 irqNum = regs->interruptNum - 32;
-  assert(irqNum < 16);
-
-  if (irqHandlerFns[irqNum]) {
-    irqHandlerFns[irqNum](regs);
+    // We need to send an EOI (end-of-interrupt command) to the interrupt
+    // controller when we are done. Only send EOI to slave controller if it's
+    // involved (irqs 8 and up).
+    if(regs->interruptNum >= 8) {
+      ports::outb(PIC2_COMMAND_PORT, PIC_EOI);
+    }
+    ports::outb(PIC1_COMMAND_PORT, PIC_EOI);
   } else {
-    display::println("Got unhandled irq ", irqNum);
-  }
+    display::println("Got isr interrupt: ", regs->interruptNum);
 
-  // We need to send an EOI (end-of-interrupt command) to the interrupt
-  // controller when we are done. Only send EOI to slave controller if it's
-  // involved (irqs 8 and up).
-  if(regs->interruptNum >= 8) {
-    ports::outb(PIC2_COMMAND_PORT, PIC_EOI);
+    // Disable interrupts and halt.
+    asm volatile("cli; hlt");
   }
-  ports::outb(PIC1_COMMAND_PORT, PIC_EOI);
 }
 
 } // namespace interrupts
