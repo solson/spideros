@@ -26,8 +26,6 @@ using IrqHandlerFn = void (*)(Registers*);
 void setIrqHandler(u32 irqNum, IrqHandlerFn handlerFn);
 
 void init();
-void initIsrs();
-void initIrqs();
 void remapPic();
 
 extern "C" void interruptHandler(Registers* regs);
