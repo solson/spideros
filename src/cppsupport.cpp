@@ -1,6 +1,5 @@
-#include "cppsupport.h"
-
-// This file implements functions required for certain C++ features to work.
+// This file implements low-level functions required for certain C++ features to
+// work. This file is not to contain C++ standard library features.
 
 extern "C" {
 
@@ -15,6 +14,14 @@ void __cxa_pure_virtual() {
 // implemented. Refer to
 // http://sourcery.mentor.com/public/cxx-abi/abi.html#dso-dtor. Basically, this
 // is required for global object destructors to be called after kmain returns.
+
+const unsigned int ATEXIT_MAX_FUNCS = 128; // TODO: Why 128? I don't know.
+
+struct atexit_func_entry {
+  void (*destructor)(void*);
+  void* obj_ptr;
+  void* dso_handle;
+};
 
 atexit_func_entry __atexit_funcs[ATEXIT_MAX_FUNCS];
 unsigned __atexit_func_count = 0;
