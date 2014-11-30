@@ -138,7 +138,6 @@ const char* keyName(Key key);
 void init();
 u8 readScancode();
 KeyEvent readEvent();
-void interruptHandler(interrupts::Registers* regs);
 void flushBuffer();
 
 inline void print(keyboard::Key key) {

@@ -199,11 +199,6 @@ const Key ESCAPED_KEYS[] = {
   Key::MENU,          // 0x5D
 };
 
-void init() {
-  interrupts::setIrqHandler(1, interruptHandler);
-  flushBuffer();
-}
-
 // To simplify the implementation, this ring buffer always keeps one slot
 // unused, so only `capacity - 1` items can be stored.
 template<typename T, u32 capacity>
@@ -238,6 +233,13 @@ class RingQueue {
 };
 
 RingQueue<u8, 256> scancodeQueue;
+
+void init() {
+  interrupts::setIrqHandler(1, [](interrupts::Registers*) {
+    scancodeQueue.enqueue(ports::inb(0x60));
+  });
+  flushBuffer();
+}
 
 u8 readScancode() {
   // TODO: Find a way to wait that isn't busy-waiting.
@@ -277,10 +279,6 @@ KeyEvent readEvent() {
   }
 
   return event;
-}
-
-void interruptHandler(interrupts::Registers*) {
-  scancodeQueue.enqueue(ports::inb(0x60));
 }
 
 // Flush the keyboard buffer.
