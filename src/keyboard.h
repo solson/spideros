@@ -136,7 +136,8 @@ struct KeyEvent {
 
 const char* keyName(Key key);
 void init();
-KeyEvent readRaw();
+u8 readScancode();
+KeyEvent readEvent();
 void interruptHandler(interrupts::Registers* regs);
 void flushBuffer();
 

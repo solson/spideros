@@ -237,24 +237,24 @@ class RingQueue {
   T data_[capacity];
 };
 
-RingQueue<KeyEvent, 32> eventQueue;
+RingQueue<u8, 256> scancodeQueue;
 
-KeyEvent readRaw() {
+u8 readScancode() {
   // TODO: Find a way to wait that isn't busy-waiting.
-  while (eventQueue.isEmpty()) {}
-  return eventQueue.dequeue();
+  while (scancodeQueue.isEmpty()) {}
+  return scancodeQueue.dequeue();
 }
 
 // TODO: Handle the special case keys Print Screen and Pause.
-void interruptHandler(interrupts::Registers*) {
+KeyEvent readEvent() {
   static bool nextScancodeIsEscaped = false;
   const int ESCAPE_CODE = 0xE0;
 
-  u8 scancode = ports::inb(0x60);
+  u8 scancode = readScancode();
 
   if (scancode == ESCAPE_CODE) {
     nextScancodeIsEscaped = true;
-    return;
+    scancode = readScancode();
   }
 
   KeyEvent event;
@@ -276,7 +276,11 @@ void interruptHandler(interrupts::Registers*) {
     event.key = UNESCAPED_KEYS[scancode];
   }
 
-  eventQueue.enqueue(event);
+  return event;
+}
+
+void interruptHandler(interrupts::Registers*) {
+  scancodeQueue.enqueue(ports::inb(0x60));
 }
 
 // Flush the keyboard buffer.
