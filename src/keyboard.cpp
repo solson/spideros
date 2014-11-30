@@ -235,8 +235,7 @@ void interruptHandler(interrupts::Registers*) {
   display::println(" (Key ", key, ")");
 }
 
-// Flush the keyboard buffer. This must be done after each key press or the
-// keyboard will stop sending interrupts.
+// Flush the keyboard buffer.
 void flushBuffer() {
   while(ports::inb(0x64) & 1) {
     ports::inb(0x60);
