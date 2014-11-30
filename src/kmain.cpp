@@ -58,7 +58,7 @@ extern "C" void kmain(const multiboot::Info* mbinfo, u32 magic) {
   interrupts::setIrqHandler(0, [](interrupts::Registers*) {
     static int ticks = 0;
     ticks++;
-    if (ticks % 50 == 0) {
+    if (ticks % 100 == 0) {
       display::println("Ticks: ", ticks);
     }
   });
