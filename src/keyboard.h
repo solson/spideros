@@ -127,8 +127,16 @@ enum class Key {
   RIGHT,
 };
 
+struct KeyEvent {
+  enum Action { UP, DOWN };
+
+  Key key;
+  Action action;
+};
+
 const char* keyName(Key key);
 void init();
+KeyEvent readRaw();
 void interruptHandler(interrupts::Registers* regs);
 void flushBuffer();
 

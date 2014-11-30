@@ -65,6 +65,7 @@ extern "C" void kmain(const multiboot::Info* mbinfo, u32 magic) {
 
   interrupts::enable();
   while (true) {
-    // Just wait.
+    keyboard::KeyEvent event = keyboard::readRaw();
+    display::println(event.key);
   }
 }

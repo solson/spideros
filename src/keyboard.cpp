@@ -1,3 +1,4 @@
+#include "assert.h"
 #include "display.h"
 #include "keyboard.h"
 #include "ports.h"
@@ -203,6 +204,42 @@ void init() {
   flushBuffer();
 }
 
+template<typename T, u32 capacity>
+class RingQueue {
+ public:
+  void enqueue(T elem) {
+    if (size_ == capacity) {
+      return;
+    }
+
+    data_[(startIndex_ + size_) % capacity] = elem;
+    size_++;
+  }
+
+  T dequeue() {
+    assert(size_ > 0);
+    T elem = data_[startIndex_];
+    startIndex_ = (startIndex_ + 1) % capacity;
+    size_--;
+    return elem;
+  }
+
+  u32 size() {
+    return size_;
+  }
+ private:
+  u32 startIndex_ = 0;
+  u32 size_ = 0;
+  T data_[capacity];
+};
+
+RingQueue<KeyEvent, 32> eventQueue;
+
+KeyEvent readRaw() {
+  while (eventQueue.size() == 0) {}
+  return eventQueue.dequeue();
+}
+
 // TODO: Handle the special case keys Print Screen and Pause.
 void interruptHandler(interrupts::Registers*) {
   static bool nextScancodeIsEscaped = false;
@@ -215,24 +252,26 @@ void interruptHandler(interrupts::Registers*) {
     return;
   }
 
-  if (scancode & (1 << 7)) {
-    display::print("Key up:   ");
-  } else {
-    display::print("Key down: ");
-  }
-  display::print(display::hex(scancode));
+  KeyEvent event;
 
-  u8 code = scancode & ~(1 << 7);
-  Key key;
+  // If the seventh bit is set, the scancode represents a key release, otherwise
+  // it's a key press.
+  if (scancode & (1 << 7)) {
+    event.action = KeyEvent::UP;
+    // Clear the seventh bit before indexing into the key code tables below.
+    scancode &= ~(1 << 7);
+  } else {
+    event.action = KeyEvent::DOWN;
+  }
 
   if (nextScancodeIsEscaped) {
     nextScancodeIsEscaped = false;
-    key = ESCAPED_KEYS[code];
+    event.key = ESCAPED_KEYS[scancode];
   } else {
-    key = UNESCAPED_KEYS[code];
+    event.key = UNESCAPED_KEYS[scancode];
   }
 
-  display::println(" (Key ", key, ")");
+  eventQueue.enqueue(event);
 }
 
 // Flush the keyboard buffer.
