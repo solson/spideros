@@ -9,6 +9,8 @@ env = Environment(
         '-m32',
         '-march=i386',
         '-nostdlib',
+        '-nostdinc',
+        '-ffreestanding',
         '-fno-builtin',
         '-fno-exceptions',
         '-fno-rtti',
