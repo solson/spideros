@@ -204,39 +204,44 @@ void init() {
   flushBuffer();
 }
 
+// To simplify the implementation, this ring buffer always keeps one slot
+// unused, so only `capacity - 1` items can be stored.
 template<typename T, u32 capacity>
 class RingQueue {
  public:
-  void enqueue(T elem) {
-    if (size_ == capacity) {
+  void enqueue(const T& elem) {
+    if (isFull()) {
       return;
     }
-
-    data_[(startIndex_ + size_) % capacity] = elem;
-    size_++;
+    data_[end_] = elem;
+    end_ = (end_ + 1) % capacity;
   }
 
   T dequeue() {
-    assert(size_ > 0);
-    T elem = data_[startIndex_];
-    startIndex_ = (startIndex_ + 1) % capacity;
-    size_--;
+    assert(!isEmpty());
+    T elem = data_[start_];
+    start_ = (start_ + 1) % capacity;
     return elem;
   }
 
-  u32 size() {
-    return size_;
+  bool isFull() const {
+    return (end_ + 1) % capacity == start_;
+  }
+
+  bool isEmpty() const {
+    return start_ == end_;
   }
  private:
-  u32 startIndex_ = 0;
-  u32 size_ = 0;
+  u32 start_ = 0;
+  u32 end_   = 0;
   T data_[capacity];
 };
 
 RingQueue<KeyEvent, 32> eventQueue;
 
 KeyEvent readRaw() {
-  while (eventQueue.size() == 0) {}
+  // TODO: Find a way to wait that isn't busy-waiting.
+  while (eventQueue.isEmpty()) {}
   return eventQueue.dequeue();
 }
 
