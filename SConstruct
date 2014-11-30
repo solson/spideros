@@ -7,6 +7,7 @@ env = Environment(
         '-Wextra',
         '-std=c++11', # TODO: Switch to c++14/c++1y.
         '-m32',
+        '-march=i386',
         '-nostdlib',
         '-fno-builtin',
         '-fno-exceptions',
