@@ -333,6 +333,14 @@ KeyEvent readEvent() {
   return event;
 }
 
+char readChar() {
+  KeyEvent event;
+  do {
+    event = readEvent();
+  } while (!event.character);
+  return event.character;
+}
+
 // Flush the keyboard buffer.
 void flushBuffer() {
   while(ports::inb(0x64) & 1) {

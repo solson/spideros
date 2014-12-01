@@ -44,7 +44,7 @@ extern "C" void kmain(const multiboot::Info* mbinfo, u32 magic) {
   runInit("interrupt handlers", interrupts::init);
   runInit("keyboard", keyboard::init);
   display::println();
-  display::println("Type away: ");
+  display::print("Type away: ");
 
   // Handle timer interrupts.
   interrupts::setIrqHandler(0, [](interrupts::Registers*) {
@@ -57,9 +57,6 @@ extern "C" void kmain(const multiboot::Info* mbinfo, u32 magic) {
 
   interrupts::enable();
   while (true) {
-    keyboard::KeyEvent event = keyboard::readEvent();
-    if (event.character) {
-      display::print(event.character);
-    }
+    display::print(keyboard::readChar());
   }
 }

@@ -149,6 +149,7 @@ struct KeyEvent {
 };
 
 void init();
+char readChar();
 KeyEvent readEvent();
 void flushBuffer();
 const char* keyName(Key key);
