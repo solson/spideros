@@ -72,6 +72,7 @@ void print(char c) {
       if (cursorX != 0) {
         cursorX--;
       }
+      printAt(' ', cursorX, cursorY);
       break;
 
     case '\t':
