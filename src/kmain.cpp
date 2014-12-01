@@ -29,10 +29,6 @@ extern "C" void kmain(const multiboot::Info* mbinfo, u32 magic) {
   display::clearScreen();
   display::println("Welcome to spideros");
   display::println("===================");
-  display::println("This is", " a", ' ', 't', "est", '.');
-  const int a = 12, b = 3;
-  display::println("Hey look, numbers: ", a, " * ", b, " = ", a * b);
-  display::println();
 
   if (mbinfo->hasFlag(multiboot::BOOTLOADER_NAME)) {
     display::println("Bootloader:\t", (const char*) mbinfo->bootloaderName);
@@ -42,39 +38,28 @@ extern "C" void kmain(const multiboot::Info* mbinfo, u32 magic) {
     display::println("Command line:\t", (const char*) mbinfo->commandLine);
   }
 
-  display::println("Integer printing tests:");
-  display::println("Hex: 0x", display::hex(42));
-  display::println("Oct: 0",  display::oct(42));
-  display::println("Bin: 0b", display::bin(42));
-  display::println("Dec: ", 42);
   display::println();
-
   runInit("GDT", gdt::init);
   runInit("IDT", idt::init);
   runInit("interrupt handlers", interrupts::init);
   runInit("keyboard", keyboard::init);
+  display::println();
+  display::println("Type away: ");
 
   // Handle timer interrupts.
   interrupts::setIrqHandler(0, [](interrupts::Registers*) {
-    static int ticks = 0;
-    ticks++;
-    if (ticks % 100 == 0) {
-      display::println("Ticks: ", ticks);
-    }
+    // static int ticks = 0;
+    // ticks++;
+    // if (ticks % 100 == 0) {
+    //   display::println("Ticks: ", ticks);
+    // }
   });
 
   interrupts::enable();
   while (true) {
     keyboard::KeyEvent event = keyboard::readEvent();
-    display::println(
-        event.action == keyboard::KeyEvent::UP ? "Release " : "Press   ",
-        event.shift      ? "S " : "  ",
-        event.control    ? "C " : "  ",
-        event.super      ? "W " : "  ",
-        event.alt        ? "A " : "  ",
-        event.capsLock   ? "K " : "  ",
-        event.numLock    ? "N " : "  ",
-        event.scrollLock ? "L | " : "  | ",
-        event.key);
+    if (event.character) {
+      display::print(event.character);
+    }
   }
 }

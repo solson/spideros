@@ -320,6 +320,16 @@ KeyEvent readEvent() {
   event.numLock    = numLock;
   event.scrollLock = scrollLock;
 
+  if (isPress) {
+    if (event.shift) {
+      event.character = upperCaseChar(event.key);
+    } else {
+      event.character = lowerCaseChar(event.key);
+    }
+  } else {
+    event.character = '\0';
+  }
+
   return event;
 }
 
@@ -438,6 +448,152 @@ const char* keyName(Key key) {
     case Key::LEFT:                 return "Left";
     case Key::RIGHT:                return "Right";
     default:                        return "<INVALID>";
+  }
+}
+
+char lowerCaseChar(Key key) {
+  switch (key) {
+    case Key::_1:                   return '1';
+    case Key::_2:                   return '2';
+    case Key::_3:                   return '3';
+    case Key::_4:                   return '4';
+    case Key::_5:                   return '5';
+    case Key::_6:                   return '6';
+    case Key::_7:                   return '7';
+    case Key::_8:                   return '8';
+    case Key::_9:                   return '9';
+    case Key::_0:                   return '0';
+    case Key::A:                    return 'a';
+    case Key::B:                    return 'b';
+    case Key::C:                    return 'c';
+    case Key::D:                    return 'd';
+    case Key::E:                    return 'e';
+    case Key::F:                    return 'f';
+    case Key::G:                    return 'g';
+    case Key::H:                    return 'h';
+    case Key::I:                    return 'i';
+    case Key::J:                    return 'j';
+    case Key::K:                    return 'k';
+    case Key::L:                    return 'l';
+    case Key::M:                    return 'm';
+    case Key::N:                    return 'n';
+    case Key::O:                    return 'o';
+    case Key::P:                    return 'p';
+    case Key::Q:                    return 'q';
+    case Key::R:                    return 'r';
+    case Key::S:                    return 's';
+    case Key::T:                    return 't';
+    case Key::U:                    return 'u';
+    case Key::V:                    return 'v';
+    case Key::W:                    return 'w';
+    case Key::X:                    return 'x';
+    case Key::Y:                    return 'y';
+    case Key::Z:                    return 'z';
+    case Key::TAB:                  return '\t';
+    case Key::SPACE:                return ' ';
+    case Key::DASH:                 return '-';
+    case Key::EQUAL:                return '=';
+    case Key::BACKSPACE:            return '\b';
+    case Key::ENTER:                return '\n';
+    case Key::SEMICOLON:            return ';';
+    case Key::SINGLE_QUOTE:         return '\'';
+    case Key::BACKTICK:             return '`';
+    case Key::BACKSLASH:            return '\\';
+    case Key::COMMA:                return ',';
+    case Key::PERIOD:               return '.';
+    case Key::SLASH:                return '/';
+    case Key::LEFT_SQUARE_BRACKET:  return '[';
+    case Key::RIGHT_SQUARE_BRACKET: return ']';
+    case Key::KEYPAD_MULTIPLY:      return '*';
+    case Key::KEYPAD_DIVIDE:        return '/';
+    case Key::KEYPAD_ADD:           return '+';
+    case Key::KEYPAD_SUBTRACT:      return '-';
+    case Key::KEYPAD_DECIMAL:       return '.';
+    case Key::KEYPAD_ENTER:         return '\n';
+    case Key::KEYPAD_1:             return '1';
+    case Key::KEYPAD_2:             return '2';
+    case Key::KEYPAD_3:             return '3';
+    case Key::KEYPAD_4:             return '4';
+    case Key::KEYPAD_5:             return '5';
+    case Key::KEYPAD_6:             return '6';
+    case Key::KEYPAD_7:             return '7';
+    case Key::KEYPAD_8:             return '8';
+    case Key::KEYPAD_9:             return '9';
+    case Key::KEYPAD_0:             return '0';
+    default:                        return '\0';
+  }
+}
+
+char upperCaseChar(Key key) {
+  switch (key) {
+    case Key::_1:                   return '!';
+    case Key::_2:                   return '@';
+    case Key::_3:                   return '#';
+    case Key::_4:                   return '$';
+    case Key::_5:                   return '%';
+    case Key::_6:                   return '^';
+    case Key::_7:                   return '&';
+    case Key::_8:                   return '*';
+    case Key::_9:                   return '(';
+    case Key::_0:                   return ')';
+    case Key::A:                    return 'A';
+    case Key::B:                    return 'B';
+    case Key::C:                    return 'C';
+    case Key::D:                    return 'D';
+    case Key::E:                    return 'E';
+    case Key::F:                    return 'F';
+    case Key::G:                    return 'G';
+    case Key::H:                    return 'H';
+    case Key::I:                    return 'I';
+    case Key::J:                    return 'J';
+    case Key::K:                    return 'K';
+    case Key::L:                    return 'L';
+    case Key::M:                    return 'M';
+    case Key::N:                    return 'N';
+    case Key::O:                    return 'O';
+    case Key::P:                    return 'P';
+    case Key::Q:                    return 'Q';
+    case Key::R:                    return 'R';
+    case Key::S:                    return 'S';
+    case Key::T:                    return 'T';
+    case Key::U:                    return 'U';
+    case Key::V:                    return 'V';
+    case Key::W:                    return 'W';
+    case Key::X:                    return 'X';
+    case Key::Y:                    return 'Y';
+    case Key::Z:                    return 'Z';
+    case Key::TAB:                  return '\t';
+    case Key::SPACE:                return ' ';
+    case Key::DASH:                 return '_';
+    case Key::EQUAL:                return '+';
+    case Key::BACKSPACE:            return '\b';
+    case Key::ENTER:                return '\n';
+    case Key::SEMICOLON:            return ':';
+    case Key::SINGLE_QUOTE:         return '"';
+    case Key::BACKTICK:             return '~';
+    case Key::BACKSLASH:            return '|';
+    case Key::COMMA:                return '<';
+    case Key::PERIOD:               return '>';
+    case Key::SLASH:                return '?';
+    case Key::LEFT_SQUARE_BRACKET:  return '{';
+    case Key::RIGHT_SQUARE_BRACKET: return '}';
+    case Key::KEYPAD_MULTIPLY:      return '*';
+    case Key::KEYPAD_DIVIDE:        return '/';
+    case Key::KEYPAD_ADD:           return '+';
+    case Key::KEYPAD_SUBTRACT:      return '-';
+    case Key::KEYPAD_DECIMAL:       return '.';
+    case Key::KEYPAD_ENTER:         return '\n';
+    case Key::KEYPAD_1:             return '1';
+    case Key::KEYPAD_2:             return '2';
+    case Key::KEYPAD_3:             return '3';
+    case Key::KEYPAD_4:             return '4';
+    case Key::KEYPAD_5:             return '5';
+    case Key::KEYPAD_6:             return '6';
+    case Key::KEYPAD_7:             return '7';
+    case Key::KEYPAD_8:             return '8';
+    case Key::KEYPAD_9:             return '9';
+    case Key::KEYPAD_0:             return '0';
+    default:                        return '\0';
   }
 }
 

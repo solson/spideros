@@ -133,10 +133,13 @@ struct KeyEvent {
   Key key;
   Action action;
 
+  // Set to '\0' if the key doesn't correspond to a character.
+  char character;
+
   // Modifiers. True if pressed at the time of this event.
-  bool shift;
-  bool control;
   bool alt;
+  bool control;
+  bool shift;
   bool super;
 
   // Toggles. True if turned on at the time of this event.
@@ -145,10 +148,12 @@ struct KeyEvent {
   bool scrollLock;
 };
 
-const char* keyName(Key key);
 void init();
 KeyEvent readEvent();
 void flushBuffer();
+const char* keyName(Key key);
+char lowerCaseChar(Key key);
+char upperCaseChar(Key key);
 
 inline void print(keyboard::Key key) {
   display::print(keyName(key));
