@@ -5,17 +5,8 @@
 
 namespace display {
 
-const int consoleWidth = 80;
-const int consoleHeight = 25;
-
-// Display-related I/O ports. They are taken from the BIOS Data Area during
-// init();
-extern u16 indexPort;
-extern u16 dataPort;
-
-// Indexes for the index port.
-const int cursorLowPort  = 0x0E;
-const int cursorHighPort = 0x0F;
+const int CONSOLE_WIDTH = 80;
+const int CONSOLE_HEIGHT = 25;
 
 extern int cursorX, cursorY;
 extern u8 color;

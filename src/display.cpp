@@ -10,6 +10,12 @@ int cursorX = 0;
 int cursorY = 0;
 u8 color;
 
+// Indexes for the index port.
+const int CURSOR_LOW_PORT  = 0x0E;
+const int CURSOR_HIGH_PORT = 0x0F;
+
+// Display-related I/O ports. They are taken from the BIOS Data Area during
+// init();
 u16 indexPort;
 u16 dataPort;
 
@@ -28,7 +34,7 @@ void setColor(Color fg, Color bg) {
 }
 
 void clearScreen() {
-  for (int i = 0; i < consoleHeight * consoleWidth; i++)
+  for (int i = 0; i < CONSOLE_HEIGHT * CONSOLE_WIDTH; i++)
     videoram[i] = Cell(color, ' ');
 
   cursorX = 0;
@@ -38,28 +44,28 @@ void clearScreen() {
 
 void scroll() {
   // Copy each line onto the one above it.
-  for (int y = 0; y < consoleHeight - 1; y++)
-    for (int x = 0; x < consoleWidth; x++)
+  for (int y = 0; y < CONSOLE_HEIGHT - 1; y++)
+    for (int x = 0; x < CONSOLE_WIDTH; x++)
       cellAt(x, y) = cellAt(x, y + 1);
 
   // Blank out the bottom line.
-  for (int x = 0; x < consoleWidth; x++)
-    cellAt(x, consoleHeight - 1) = Cell(color, ' ');
+  for (int x = 0; x < CONSOLE_WIDTH; x++)
+    cellAt(x, CONSOLE_HEIGHT - 1) = Cell(color, ' ');
 }
 
 // Update the position of the blinking cursor on the screen.
 void updateCursor() {
-  const int position = cursorY * consoleWidth + cursorX;
+  const int position = cursorY * CONSOLE_WIDTH + cursorX;
 
-  ports::outb(indexPort, cursorLowPort);
+  ports::outb(indexPort, CURSOR_LOW_PORT);
   ports::outb(dataPort, position >> 8);
 
-  ports::outb(indexPort, cursorHighPort);
+  ports::outb(indexPort, CURSOR_HIGH_PORT);
   ports::outb(dataPort, position);
 }
 
 Cell& cellAt(int x, int y) {
-  return videoram[y * consoleWidth + x];
+  return videoram[y * CONSOLE_WIDTH + x];
 }
 
 void printAt(char c, int x, int y) {
@@ -94,12 +100,12 @@ void print(char c) {
       cursorX++;
   }
 
-  if (cursorX == consoleWidth) {
+  if (cursorX == CONSOLE_WIDTH) {
     cursorX = 0;
     cursorY++;
   }
 
-  if (cursorY == consoleHeight) {
+  if (cursorY == CONSOLE_HEIGHT) {
     cursorY--;
     scroll();
   }
