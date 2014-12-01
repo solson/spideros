@@ -132,11 +132,21 @@ struct KeyEvent {
 
   Key key;
   Action action;
+
+  // Modifiers. True if pressed at the time of this event.
+  bool shift;
+  bool control;
+  bool alt;
+  bool super;
+
+  // Toggles. True if turned on at the time of this event.
+  bool capsLock;
+  bool numLock;
+  bool scrollLock;
 };
 
 const char* keyName(Key key);
 void init();
-u8 readScancode();
 KeyEvent readEvent();
 void flushBuffer();
 

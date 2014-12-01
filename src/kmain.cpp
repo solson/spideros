@@ -66,6 +66,15 @@ extern "C" void kmain(const multiboot::Info* mbinfo, u32 magic) {
   interrupts::enable();
   while (true) {
     keyboard::KeyEvent event = keyboard::readEvent();
-    display::println(event.key);
+    display::println(
+        event.action == keyboard::KeyEvent::UP ? "Release " : "Press   ",
+        event.shift      ? "S " : "  ",
+        event.control    ? "C " : "  ",
+        event.super      ? "W " : "  ",
+        event.alt        ? "A " : "  ",
+        event.capsLock   ? "K " : "  ",
+        event.numLock    ? "N " : "  ",
+        event.scrollLock ? "L | " : "  | ",
+        event.key);
   }
 }

@@ -249,8 +249,21 @@ u8 readScancode() {
 
 // TODO: Handle the special case keys Print Screen and Pause.
 KeyEvent readEvent() {
-  static bool nextScancodeIsEscaped = false;
   const int ESCAPE_CODE = 0xE0;
+  static bool nextScancodeIsEscaped = false;
+
+  // Persistant storage for the state of the various modifier and toggle keys.
+  static bool leftAlt      = false;
+  static bool rightAlt     = false;
+  static bool leftControl  = false;
+  static bool rightControl = false;
+  static bool leftShift    = false;
+  static bool rightShift   = false;
+  static bool leftSuper    = false;
+  static bool rightSuper   = false;
+  static bool capsLock     = false;
+  static bool numLock      = false;
+  static bool scrollLock   = false;
 
   u8 scancode = readScancode();
 
@@ -263,13 +276,11 @@ KeyEvent readEvent() {
 
   // If the seventh bit is set, the scancode represents a key release, otherwise
   // it's a key press.
-  if (scancode & (1 << 7)) {
-    event.action = KeyEvent::UP;
-    // Clear the seventh bit before indexing into the key code tables below.
-    scancode &= ~(1 << 7);
-  } else {
-    event.action = KeyEvent::DOWN;
-  }
+  bool isPress = !(scancode & (1 << 7));
+  event.action = isPress ? KeyEvent::DOWN : KeyEvent::UP;
+
+  // Clear the seventh bit before indexing into the key code tables below.
+  scancode &= ~(1 << 7);
 
   if (nextScancodeIsEscaped) {
     nextScancodeIsEscaped = false;
@@ -277,6 +288,37 @@ KeyEvent readEvent() {
   } else {
     event.key = UNESCAPED_KEYS[scancode];
   }
+
+  // Turn modifiers on or off based on whether this is a press or release.
+  switch (event.key) {
+    case Key::LEFT_ALT:      leftAlt      = isPress; break;
+    case Key::RIGHT_ALT:     rightAlt     = isPress; break;
+    case Key::LEFT_CONTROL:  leftControl  = isPress; break;
+    case Key::RIGHT_CONTROL: rightControl = isPress; break;
+    case Key::LEFT_SHIFT:    leftShift    = isPress; break;
+    case Key::RIGHT_SHIFT:   rightShift   = isPress; break;
+    case Key::LEFT_SUPER:    leftSuper    = isPress; break;
+    case Key::RIGHT_SUPER:   rightSuper   = isPress; break;
+    default: break;
+  }
+
+  // Switch the toggles if this is a key press, not a release.
+  if (isPress) {
+    switch (event.key) {
+      case Key::CAPS_LOCK:   capsLock   = !capsLock;   break;
+      case Key::NUM_LOCK:    numLock    = !numLock;    break;
+      case Key::SCROLL_LOCK: scrollLock = !scrollLock; break;
+      default: break;
+    }
+  }
+
+  event.shift      = leftShift   || rightShift;
+  event.control    = leftControl || rightControl;
+  event.alt        = leftAlt     || rightAlt;
+  event.super      = leftSuper   || rightSuper;
+  event.capsLock   = capsLock;
+  event.numLock    = numLock;
+  event.scrollLock = scrollLock;
 
   return event;
 }
