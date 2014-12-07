@@ -1,6 +1,6 @@
 #include "idt.h"
 #include "interrupts.h"
-#include "memory.h"
+#include "util.h"
 
 namespace idt {
 

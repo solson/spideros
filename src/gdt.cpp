@@ -1,6 +1,6 @@
 #include "gdt.h"
-#include "memory.h"
 #include "assert.h"
+#include "util.h"
 
 // See http://wiki.osdev.org/GDT, or none of this will make any sense
 

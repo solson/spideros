@@ -1,5 +1,4 @@
 #include "display.h"
-#include "string.h"
 #include "ports.h"
 #include "assert.h"
 
