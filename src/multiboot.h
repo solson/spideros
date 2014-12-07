@@ -19,18 +19,18 @@ struct ElfSectionHeaderTable {
 
 // The different possible flags in the flags member
 enum Flag {
-  MEMORY           = 1 << 0,
-  BOOT_DEVICE        = 1 << 1,
-  COMMAND_LINE       = 1 << 2,
-  MODULES          = 1 << 3,
-  AOUT_SYMBOL_TABLE    = 1 << 4, // These two are
+  MEMORY                   = 1 << 0,
+  BOOT_DEVICE              = 1 << 1,
+  COMMAND_LINE             = 1 << 2,
+  MODULES                  = 1 << 3,
+  AOUT_SYMBOL_TABLE        = 1 << 4, // These two are
   ELF_SECTION_HEADER_TABLE = 1 << 5, // mutually exclusive.
-  MEMORY_MAP         = 1 << 6,
-  DRIVE_INFO         = 1 << 7,
-  CONFIG_TABLE       = 1 << 8,
-  BOOTLOADER_NAME      = 1 << 9,
-  APM_TABLE        = 1 << 10,
-  VIDEO_INFO         = 1 << 11
+  MEMORY_MAP               = 1 << 6,
+  DRIVE_INFO               = 1 << 7,
+  CONFIG_TABLE             = 1 << 8,
+  BOOTLOADER_NAME          = 1 << 9,
+  APM_TABLE                = 1 << 10,
+  VIDEO_INFO               = 1 << 11
 };
 
 // Structure of the information recieved from the multiboot-compliant bootloader
@@ -55,7 +55,7 @@ struct Info {
   u32 commandLine;
 
   // Boot module list
-  u32 modulesCount, modulesAddress;
+  u32 modulesCount, modulesAddr;
 
   union {
     AoutSymbolTable aoutSymbolTable;
@@ -63,10 +63,10 @@ struct Info {
   };
 
   // Memory mapping buffer
-  u32 mmapLength, mmapAddress;
+  u32 mmapLen, mmapAddr;
 
   // Drive info buffer
-  u32 drivesLength, drivesAddress;
+  u32 drivesLen, drivesAddr;
 
   // ROM configuration table
   u32 configTable;
@@ -88,10 +88,10 @@ struct MmapEntry {
   u32 size;
 
   // Memory region starting address (address_high only for 64-bit)
-  u32 addressLow, addressHigh;
+  u32 addr, addrHigh;
 
   // Memory region length (length_high only for 64-bit)
-  u32 lengthLow, lengthHigh;
+  u32 len, lenHigh;
 
   // Type of memory (1 means available, 2 means reserved)
   u32 type;

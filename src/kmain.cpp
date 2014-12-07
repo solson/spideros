@@ -3,12 +3,14 @@
 #include "idt.h"
 #include "interrupts.h"
 #include "keyboard.h"
+#include "memory.h"
 #include "multiboot.h"
 #include "ports.h"
 #include "types.h"
 
 namespace {
-void runInit(const char* stage, void (*initFn)()) {
+template<typename Fn>
+void runInit(const char* stage, Fn initFn) {
   display::print("Initializing ", stage, "... ");
   initFn();
   display::println("done.");
@@ -39,6 +41,9 @@ extern "C" void kmain(const multiboot::Info* mbinfo, u32 magic) {
   }
 
   display::println();
+  runInit("memory manager", [mbinfo] {
+    memory::init(mbinfo->mmapAddr, mbinfo->mmapLen);
+  });
   runInit("GDT", gdt::init);
   runInit("IDT", idt::init);
   runInit("interrupt handlers", interrupts::init);

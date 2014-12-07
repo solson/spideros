@@ -3,6 +3,7 @@ ENTRY(boot)
 SECTIONS
 {
     . = 0x00100000;
+    kernel_start = .;
 
     .text ALIGN (0x1000) :
     {
@@ -34,6 +35,8 @@ SECTIONS
         *(.gnu.linkonce.b*)
         ebss = .;
     }
+
+    kernel_end = .;
 
     /DISCARD/ :
     {
