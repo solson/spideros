@@ -13,9 +13,9 @@ SECTIONS
 
     .rodata ALIGN (0x1000) :
     {
-        start_ctors = .;
+        linker_constructorsStart = .;
         *(.ctor*)
-        end_ctors = .;
+        linker_constructorsEnd = .;
 
         *(.rodata*)
         *(.gnu.linkonce.r*)

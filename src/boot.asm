@@ -3,8 +3,10 @@ global boot                             ; making entry point visible to linker
 extern kmain                            ; kmain is defined in kmain.cpp
 extern __cxa_finalize
 
-extern start_ctors                      ; beginning and end
-extern end_ctors                        ; of the respective
+; Defined by the linker (see linker.ld). Contain the addresses of the start and
+; end of the array of function pointers for static object constructors.
+extern linker_constructorsStart
+extern linker_constructorsEnd
 
 ; setting up the Multiboot header - see GRUB docs for details
 MODULEALIGN equ  1<<0                   ; align loaded modules on page boundaries
@@ -28,13 +30,13 @@ boot:
     push eax                            ; Multiboot magic number
     push ebx                            ; Multiboot info structure
 
-    mov  ebx, start_ctors               ; call the constructors
+    mov  ebx, linker_constructorsStart  ; call the constructors
     jmp  .ctors_until_end
 .call_constructor:
     call [ebx]
     add  ebx,4
 .ctors_until_end:
-    cmp  ebx, end_ctors
+    cmp  ebx, linker_constructorsEnd
     jb   .call_constructor
 
     call kmain                          ; call kernel proper
