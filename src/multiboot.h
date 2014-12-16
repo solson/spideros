@@ -87,10 +87,10 @@ struct MmapEntry {
   // Size of the structure (not counting the size member itself)
   u32 size;
 
-  // Memory region starting address (address_high only for 64-bit)
+  // Memory region starting address (addrHigh only for 64-bit)
   u32 addr, addrHigh;
 
-  // Memory region length (length_high only for 64-bit)
+  // Memory region length (lenHigh only for 64-bit)
   u32 len, lenHigh;
 
   // Type of memory (1 means available, 2 means reserved)
@@ -99,7 +99,7 @@ struct MmapEntry {
 
 // Structure of a module in the multiboot boot module list
 struct ModuleList {
-  // The memory goes from module_start to module_end-1 inclusive.
+  // The memory goes from moduleStart to moduleEnd-1 inclusive.
   u32 moduleStart, moduleEnd;
 
   // Command line given to the module
