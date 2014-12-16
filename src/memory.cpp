@@ -94,6 +94,11 @@ void initContiguousRegion(u32 startAddr, u32 endAddr) {
   display::println("> initContiguousRegion(", display::hex(startAddr), ", ",
                    display::hex(endAddr - 1), ")");
 
+  // Don't store anything at address zero or nullptr checks will go wrong.
+  if (startAddr == 0) {
+    startAddr += sizeof(Header);
+  }
+
   // When coalescing adjacent free memory regions into a single large region, we
   // always examine the regions before and after the newly freed region, which
   // won't work when the first or last region of available memory is freed.
@@ -108,9 +113,10 @@ void initContiguousRegion(u32 startAddr, u32 endAddr) {
   placeFooter(endAddr, 0, true);
 
   // Set up the header and footer.
-  u32 size = endAddr - startAddr;
+  u32 size = endAddr - startAddr - sizeof(Header) - sizeof(Footer);
   Header* header = placeHeader(startAddr, size, false);
-  placeFooter(endAddr - sizeof(Info), size, false);
+  header->footer()->size = size;
+  header->footer()->isAllocated = false;
 
   // Set up the free-region-specific info after the header and hook up the free
   // list links.
@@ -157,6 +163,17 @@ void init(u32 mmapAddr, u32 mmapLen) {
 
   display::println("kernel start: 0x", display::hex(KERNEL_START));
   display::println("kernel end:   0x", display::hex(KERNEL_END));
+
+  display::println();
+  for (Header* h = freeList; h; h = h->freeInfo()->next) {
+    assert(!h->isAllocated);
+    assert(!h->footer()->isAllocated);
+    assert(h->size == h->footer()->size);
+    display::println("Header: ", display::hex(reinterpret_cast<u32>(h)));
+    display::println("Footer: ", display::hex(reinterpret_cast<u32>(h->footer())));
+    display::println("Size:   ", h->size);
+    display::println();
+  }
 }
 
 } // namespace memory
