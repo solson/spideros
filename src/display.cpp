@@ -71,7 +71,7 @@ void printAt(char c, int x, int y) {
   cellAt(x, y) = Cell(color, c);
 }
 
-void print(char c) {
+void printChar(char c) {
   switch(c) {
     case '\b':
       if (cursorX != 0) {
@@ -112,9 +112,13 @@ void print(char c) {
   updateCursor();
 }
 
+void print(char c) {
+  printChar(c);
+}
+
 void print(const char* str) {
   while (*str != '\0') {
-    print(*str);
+    printChar(*str);
     str++;
   }
 }

@@ -51,10 +51,12 @@ void setColor(Color fg, Color bg);
 // Printing functions.
 void printInt(u32 n, int radix);
 void printAt(char c, int x, int y);
+void printChar(char c);
 void print(char c);
 void print(const char* str);
 void print(i32 x);
 void print(u32 x);
+
 
 // Special number base formatting "tag" struct.
 template<typename Int>
@@ -101,7 +103,57 @@ void println(Args... args) {
   print(args..., '\n');
 }
 
+inline void printWithFormat(int x, const char*) {
+  print(x);
+}
+
+inline void printf(const char* format) {
+  print(format);
+}
+
+template<typename First, typename... Rest>
+void printf(const char* format, First firstArg, Rest... restArgs) {
+  const u32 SPECIFIER_MAX_LENGTH = 64;
+  char specifier[SPECIFIER_MAX_LENGTH];
+  u32 specifierIndex = 0;
+  bool parsingSpecifier = false;
+  bool escaped = false;
+
+  for (const char* p = format; *p != '\0'; ++p) {
+    char c = *p;
+    if (escaped) {
+      if (c == '\\' || c == '{') {
+        print(c);
+      } else {
+        print('\\', c);
+      }
+      escaped = false;
+    } else if (c == '{' && !parsingSpecifier) {
+      parsingSpecifier = true;
+    } else if (parsingSpecifier) {
+      if (c == '}') {
+        specifier[specifierIndex] = '\0';
+        printWithFormat(firstArg, specifier);
+        printf(p + 1, restArgs...);
+        return;
+      } else {
+        specifier[specifierIndex] = c;
+        ++specifierIndex;
+      }
+    } else if (c == '\\') {
+      escaped = true;
+    } else {
+      print(c);
+    }
+  }
+
+  if (escaped) {
+    print('\\');
+  } else if (parsingSpecifier) {
+    // TODO: Unmatched { hit end of string. Should panic.
+  }
+}
+
 } // namepspace display
 
 #endif // DISPLAY_H
-

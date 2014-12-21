@@ -49,6 +49,9 @@ extern "C" void kmain(const multiboot::Info* mbinfo, u32 magic) {
   runInit("interrupt handlers", interrupts::init);
   runInit("keyboard", keyboard::init);
   display::println();
+
+  display::printf("1 + 2 = {}.\n", 1 + 2);
+
   display::print("Type away: ");
 
   // Handle timer interrupts.
