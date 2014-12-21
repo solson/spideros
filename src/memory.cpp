@@ -91,8 +91,7 @@ void initContiguousRegion(u32 startAddr, u32 endAddr) {
   // TODO: Move the lastAdded variable into the memory::init() function.
   static Header* lastAdded = nullptr;
 
-  display::println("> initContiguousRegion(", display::hex(startAddr), ", ",
-                   display::hex(endAddr - 1), ")");
+  display::println("> initContiguousRegion({x}, {x})", startAddr, endAddr - 1);
 
   // Don't store anything at address zero or nullptr checks will go wrong.
   if (startAddr == 0) {
@@ -136,7 +135,7 @@ void init(u32 mmapAddr, u32 mmapLen) {
   u32 mmapCurr = mmapAddr;
   u32 mmapEnd = mmapAddr + mmapLen;
 
-  display::println();
+  display::println("");
   while (mmapCurr < mmapEnd) {
     auto* mmapEntry = reinterpret_cast<multiboot::MmapEntry*>(mmapCurr);
     if (mmapEntry->type == 1) {
@@ -155,24 +154,24 @@ void init(u32 mmapAddr, u32 mmapLen) {
     }
 
     display::print(mmapEntry->type == 1 ? "unused" : "used  ");
-    display::print(" 0x", display::hex(mmapEntry->addr));
-    display::println("\t- 0x", display::hex(mmapEntry->addr + mmapEntry->len - 1));
+    display::println(" 0x{x}\t- 0x{x}", mmapEntry->addr,
+                     mmapEntry->addr + mmapEntry->len - 1);
 
     mmapCurr += mmapEntry->size + sizeof(mmapEntry->size);
   }
 
-  display::println("kernel start: 0x", display::hex(KERNEL_START));
-  display::println("kernel end:   0x", display::hex(KERNEL_END));
+  display::println("kernel start: 0x{x}", KERNEL_START);
+  display::println("kernel end:   0x{x}", KERNEL_END);
 
-  display::println();
+  display::println("");
   for (Header* h = freeList; h; h = h->freeInfo()->next) {
     assert(!h->isAllocated);
     assert(!h->footer()->isAllocated);
     assert(h->size == h->footer()->size);
-    display::println("Header: ", display::hex(reinterpret_cast<u32>(h)));
-    display::println("Footer: ", display::hex(reinterpret_cast<u32>(h->footer())));
-    display::println("Size:   ", h->size);
-    display::println();
+    display::println("Header: 0x{x}", reinterpret_cast<u32>(h));
+    display::println("Footer: 0x{x}", reinterpret_cast<u32>(h->footer()));
+    display::println("Size:   {}", h->size);
+    display::println("");
   }
 }
 

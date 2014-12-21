@@ -11,7 +11,7 @@
 namespace {
 template<typename Fn>
 void runInit(const char* stage, Fn initFn) {
-  display::print("Initializing ", stage, "... ");
+  display::print("Initializing {}...", stage);
   initFn();
   display::println("done.");
 }
@@ -33,14 +33,14 @@ extern "C" void kmain(const multiboot::Info* mbinfo, u32 magic) {
   display::println("===================");
 
   if (mbinfo->hasFlag(multiboot::BOOTLOADER_NAME)) {
-    display::println("Bootloader:\t", (const char*) mbinfo->bootloaderName);
+    display::println("Bootloader:\t{}", (const char*) mbinfo->bootloaderName);
   }
 
   if (mbinfo->hasFlag(multiboot::COMMAND_LINE)) {
-    display::println("Command line:\t", (const char*) mbinfo->commandLine);
+    display::println("Command line:\t{}", (const char*) mbinfo->commandLine);
   }
 
-  display::println();
+  display::println("");
   runInit("memory manager", [mbinfo] {
     memory::init(mbinfo->mmapAddr, mbinfo->mmapLen);
   });
@@ -48,9 +48,9 @@ extern "C" void kmain(const multiboot::Info* mbinfo, u32 magic) {
   runInit("IDT", idt::init);
   runInit("interrupt handlers", interrupts::init);
   runInit("keyboard", keyboard::init);
-  display::println();
+  display::println("");
 
-  display::printf("1 + 2 = {}.\n", 1 + 2);
+  display::print("1 + 2 = {}.\n", 1 + 2);
 
   display::print("Type away: ");
 
@@ -65,6 +65,6 @@ extern "C" void kmain(const multiboot::Info* mbinfo, u32 magic) {
 
   interrupts::enable();
   while (true) {
-    display::print(keyboard::readChar());
+    display::print("{}", keyboard::readChar());
   }
 }

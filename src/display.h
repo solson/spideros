@@ -52,67 +52,38 @@ void setColor(Color fg, Color bg);
 void printInt(u32 n, int radix);
 void printAt(char c, int x, int y);
 void printChar(char c);
-void print(char c);
-void print(const char* str);
-void print(i32 x);
-void print(u32 x);
+void printString(const char* s);
 
-
-// Special number base formatting "tag" struct.
-template<typename Int>
-struct IntBase {
-  Int val;
-  int base;
-  constexpr IntBase(Int val, int base) : val(val), base(base) {}
-};
-
-template<typename Int>
-constexpr IntBase<Int> hex(Int x) {
-  return IntBase<Int>(x, 16);
+inline void printFmt(const char* s, const char*) {
+  printString(s);
 }
 
-template<typename Int>
-constexpr IntBase<Int> oct(Int x) {
-  return IntBase<Int>(x, 8);
+inline void printFmt(char c, const char*) {
+  printChar(c);
 }
 
-template<typename Int>
-constexpr IntBase<Int> bin(Int x) {
-  return IntBase<Int>(x, 2);
+inline void printFmt(u32 x, const char*) {
+  printInt(x, 10);
 }
 
-template<typename Int>
-void print(IntBase<Int> x) {
-  printInt(x.val, x.base);
+inline void printFmt(i32 n, const char*) {
+  if (n < 0) {
+    printChar('-');
+    // Use a cast instead of the expression -n, because -n can
+    // overflow. E.g. if n == INT_MIN, -n returns a negative, because
+    // -INT_MIN == INT_MIN.
+    printInt(static_cast<u32>(n), 10);
+  } else {
+    printInt(n, 10);
+  }
 }
 
-// No-op base case for the variadic template print function.
-inline void print() {}
-
-// Variadic print function which calls print(arg) for each argument it gets.
-template<typename First, typename Second, typename... Rest>
-void print(First first, Second second, Rest... rest) {
-  print(first);
-  print(second);
-  print(rest...);
-}
-
-// Variadic print function that adds a newline at the end.
-template<typename... Args>
-void println(Args... args) {
-  print(args..., '\n');
-}
-
-inline void printWithFormat(int x, const char*) {
-  print(x);
-}
-
-inline void printf(const char* format) {
-  print(format);
+inline void print(const char* format) {
+  printString(format);
 }
 
 template<typename First, typename... Rest>
-void printf(const char* format, First firstArg, Rest... restArgs) {
+void print(const char* format, First firstArg, Rest... restArgs) {
   const u32 SPECIFIER_MAX_LENGTH = 64;
   char specifier[SPECIFIER_MAX_LENGTH];
   u32 specifierIndex = 0;
@@ -123,9 +94,10 @@ void printf(const char* format, First firstArg, Rest... restArgs) {
     char c = *p;
     if (escaped) {
       if (c == '\\' || c == '{') {
-        print(c);
+        printChar(c);
       } else {
-        print('\\', c);
+        printChar('\\');
+        printChar(c);
       }
       escaped = false;
     } else if (c == '{' && !parsingSpecifier) {
@@ -133,8 +105,8 @@ void printf(const char* format, First firstArg, Rest... restArgs) {
     } else if (parsingSpecifier) {
       if (c == '}') {
         specifier[specifierIndex] = '\0';
-        printWithFormat(firstArg, specifier);
-        printf(p + 1, restArgs...);
+        printFmt(firstArg, specifier);
+        print(p + 1, restArgs...);
         return;
       } else {
         specifier[specifierIndex] = c;
@@ -143,15 +115,21 @@ void printf(const char* format, First firstArg, Rest... restArgs) {
     } else if (c == '\\') {
       escaped = true;
     } else {
-      print(c);
+      printChar(c);
     }
   }
 
   if (escaped) {
-    print('\\');
+    printChar('\\');
   } else if (parsingSpecifier) {
     // TODO: Unmatched { hit end of string. Should panic.
   }
+}
+
+template<typename... Args>
+void println(const char* format, Args... args) {
+  print(format, args...);
+  printChar('\n');
 }
 
 } // namepspace display

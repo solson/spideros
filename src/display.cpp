@@ -112,11 +112,7 @@ void printChar(char c) {
   updateCursor();
 }
 
-void print(char c) {
-  printChar(c);
-}
-
-void print(const char* str) {
+void printString(const char* str) {
   while (*str != '\0') {
     printChar(*str);
     str++;
@@ -136,7 +132,7 @@ void printInt(u32 n, int radix) {
   char buffer[32];
 
   if (n == 0) {
-    print('0');
+    printChar('0');
     return;
   }
 
@@ -153,24 +149,8 @@ void printInt(u32 n, int radix) {
 
   // Print the buffer in reverse order, since the digits are reversed.
   while (i != 0) {
-    print(buffer[i - 1]);
+    printChar(buffer[i - 1]);
     i--;
-  }
-}
-
-void print(u32 n) {
-  printInt(n, 10);
-}
-
-void print(i32 n) {
-  if (n < 0) {
-    print('-');
-    // Use a cast instead of the expression -n, because -n can
-    // overflow. E.g. if n == INT_MIN, -n returns a negative, because
-    // -INT_MIN == INT_MIN.
-    printInt(static_cast<u32>(n), 10);
-  } else {
-    printInt(n, 10);
   }
 }
 
