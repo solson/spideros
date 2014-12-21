@@ -62,8 +62,12 @@ inline void printFmt(char c, const char*) {
   printChar(c);
 }
 
-inline void printFmt(u32 x, const char*) {
-  printInt(x, 10);
+inline void printFmt(u32 x, const char* format) {
+  int base = 10;
+  if (*format == 'x') {
+    base = 16;
+  }
+  printInt(x, base);
 }
 
 inline void printFmt(i32 n, const char*) {
