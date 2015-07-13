@@ -5,7 +5,7 @@ env = Environment(
     CPPFLAGS = [
         '-Wall',
         '-Wextra',
-        '-std=c++11', # TODO: Switch to c++14/c++1y.
+        '-std=c++14',
         '-m32',
         '-march=i386',
         '-nostdlib',
