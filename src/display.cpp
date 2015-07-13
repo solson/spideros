@@ -81,7 +81,7 @@ void printChar(char c) {
       break;
 
     case '\t':
-      // Align cursor_x to the next multiple of 8
+      // Align cursorX to the next multiple of 8
       cursorX = cursorX - (cursorX % 8) + 8;
       break;
 
