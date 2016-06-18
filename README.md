@@ -1,7 +1,7 @@
 spideros
 ========
-A hobby operating system written in C++11. An experiment to see what use the new
-C++11 standard features might be in an operating system kernel.
+A hobby operating system written in C++14. An experiment to see what use the new
+C++14 standard features might be in an operating system kernel.
 
 
 Building
